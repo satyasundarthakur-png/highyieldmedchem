@@ -72,6 +72,31 @@ function topicColor(topicId: string) {
   return TOPIC_PALETTE[(index < 0 ? 0 : index) % TOPIC_PALETTE.length]!;
 }
 
+const TOPIC_PEARLS: Record<string, string> = {
+  "chem-carb": "Lactose intolerance (lactase deficiency) is far more common worldwide than lactase persistence; galactosemia (GALT deficiency) causes cataracts and liver damage in infancy if untreated — both are classic 'sugar chemistry' exam vignettes.",
+  "chem-protein": "Sickle cell disease (a Glu→Val substitution on beta-globin) and scurvy (impaired collagen hydroxylation from vitamin C deficiency) are the two most-tested protein chemistry disorders — one from a primary sequence defect, one from a failed post-translational modification.",
+  "nucleic-acid": "A G-C-rich DNA segment has a higher melting temperature than an A-T-rich one (3 vs 2 hydrogen bonds per pair) — this principle underlies PCR primer design and Tm calculations.",
+  enzymes: "Isoenzymes like CK-MB (cardiac) vs CK-MM (skeletal muscle) let clinicians localize tissue injury using the same catalytic reaction — the biochemical basis of cardiac biomarker panels.",
+  "tca-etc": "Thiamine (B1) deficiency impairs pyruvate dehydrogenase and α-ketoglutarate dehydrogenase — both TPP/lipoic-acid-dependent — explaining the lactic acidosis and neurologic findings of Wernicke encephalopathy.",
+  glycolysis: "The Warburg effect (aerobic glycolysis favored by cancer cells) is the biochemical basis of FDG-PET imaging — tumors take up more radiolabeled glucose analog than surrounding normal tissue.",
+  "glycogen-hmp": "Pompe disease (lysosomal acid α-glucosidase deficiency, glycogen storage disease type II) causes cardiomegaly and hypotonia in infancy — unlike the other glycogenoses, it's a lysosomal defect, not a cytosolic enzyme defect.",
+  lipid: "Carnitine deficiency (primary or secondary to valproate therapy) impairs the carnitine shuttle and can mimic a fatty-acid oxidation defect — muscle weakness with hypoketotic hypoglycemia.",
+  "amino-acid": "Phenylketonuria (phenylalanine hydroxylase deficiency) causes intellectual disability that is preventable with dietary phenylalanine restriction — the classic newborn-screening success story.",
+  "plasma-proteins": "A markedly elevated ESR/CRP alongside a low albumin reflects the acute-phase response — albumin is a negative acute-phase reactant, so it falls during significant inflammation or illness.",
+  ecm: "Osteogenesis imperfecta (a type I collagen defect) causes blue sclerae, multiple fractures, and hearing loss — 'brittle bone disease' is a direct consequence of abnormal collagen triple-helix formation.",
+  molbio: "Xeroderma pigmentosum (defective nucleotide excision repair) causes extreme UV sensitivity and early skin cancers — a direct clinical demonstration of what happens when thymine-dimer repair fails.",
+  biotech: "Non-invasive prenatal testing (NIPT) for trisomies sequences cell-free fetal DNA circulating in maternal plasma — a direct clinical application of PCR and sequencing technology.",
+  heme: "Acute intermittent porphyria (porphobilinogen deaminase deficiency) presents with abdominal pain, neuropsychiatric symptoms, and port-wine urine — classically triggered by drugs that induce ALA synthase (e.g. barbiturates).",
+  vitamins: "Vitamin B12 deficiency causes megaloblastic anemia plus subacute combined degeneration of the spinal cord, unlike folate deficiency (megaloblastic anemia alone) — always check B12 before giving folate, to avoid masking neurologic damage.",
+  "water-electrolyte": "Winter's formula predicts the expected respiratory compensation for a metabolic acidosis; a measured pCO₂ that doesn't match the prediction signals a mixed acid-base disorder.",
+  endocrine: "MEN syndromes are classic exam favorites — MEN1 (the '3 P's': pituitary, parathyroid, pancreas) vs MEN2 (medullary thyroid carcinoma + pheochromocytoma) — each tied to a distinct gene (MEN1 vs RET).",
+  nutrition: "Refeeding syndrome — a sudden insulin surge after starvation drives phosphate, potassium, and magnesium into cells — causes severe hypophosphatemia and cardiac arrhythmias in malnourished patients refed too quickly.",
+  digestion: "Dumping syndrome after gastric surgery causes rapid carbohydrate delivery to the small bowel, triggering an exaggerated insulin response and reactive hypoglycemia — a direct consequence of altered digestive physiology.",
+  iem: "Newborn screening by tandem mass spectrometry now detects dozens of inborn errors of metabolism before symptoms appear — early detection of PKU, MSUD, and others prevents irreversible neurologic damage.",
+  "organ-function": "A disproportionate rise in alkaline phosphatase and GGT relative to AST/ALT points to a cholestatic rather than hepatocellular pattern of liver injury.",
+  "free-radicals": "Paraquat poisoning generates massive reactive oxygen species in lung tissue via redox cycling, causing pulmonary fibrosis — a feared outcome in agricultural/occupational toxicology.",
+};
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -220,7 +245,8 @@ function FactSheets() {
     <section>
       <Button variant="ghost" onClick={() => setTopicId(null)} className="mb-4 -ml-3"><ArrowLeft size={16} />All topics</Button>
       <SectionIntro eyebrow={`${facts.length} high-yield facts`} title={topic.name} description={topic.blurb} />
-      <ol className="space-y-3">
+      {TOPIC_PEARLS[topicId] && <ClinicalPearl text={TOPIC_PEARLS[topicId]!} color={color} />}
+      <ol className="mt-4 space-y-3">
         {facts.map((fact, index) => (
           <li key={fact.id} className="flex gap-4 rounded-xl border border-border bg-card p-4 shadow-sm sm:p-5">
             <span
