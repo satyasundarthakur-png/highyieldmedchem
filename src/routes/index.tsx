@@ -357,14 +357,48 @@ function DiagramCard({ title, description, color, children }: { title: string; d
   );
 }
 
+function Lightbox({ icon, color, onClose }: { icon: (typeof GALLERY_ICONS)[number]; color: { bg: string; fg: string; ring: string }; onClose: () => void }) {
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={icon.label}
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/60 p-4 backdrop-blur-sm"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{ borderTopColor: color.ring }}
+        className="w-full max-w-sm rounded-2xl border-t-4 border-border bg-card p-6 text-center shadow-xl"
+      >
+        <img src={icon.src} alt={icon.label} className="mx-auto h-40 w-40 object-contain sm:h-48 sm:w-48" />
+        <p className="mt-4 text-base font-bold text-card-foreground">{icon.label}</p>
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{icon.caption}</p>
+        <Button variant="secondary" onClick={onClose} className="mt-5 rounded-lg">
+          Close
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 function Diagrams() {
   const units = Array.from(new Set(TOPICS.map((topic) => topic.unit)));
+  const [openIcon, setOpenIcon] = useState<(typeof GALLERY_ICONS)[number] | null>(null);
   return (
     <section>
       <SectionIntro
         eyebrow={`${DIAGRAMS.length} animated pathway maps`}
         title="See the pathways move"
-        description="Original diagrams built for this app — grouped by the same chapter units as the fact sheets, each with flow direction and rate-limiting steps animated."
+        description="Original diagrams built for this app — grouped by the same chapter units as the fact sheets, each with flow direction and rate-limiting steps animated. Tap any reference picture to enlarge it."
       />
       <div className="space-y-10">
         {units.map((unit) => {
@@ -393,13 +427,19 @@ function Diagrams() {
                   {iconsInUnit.map((icon) => {
                     const color = topicColor(icon.topicId);
                     return (
-                      <figure key={icon.src} style={{ borderTopColor: color.ring }} className="rounded-xl border border-border border-t-4 bg-card p-3 text-center shadow-sm">
-                        <img src={icon.src} alt={icon.label} className="mx-auto h-16 w-16 object-contain" loading="lazy" />
+                      <button
+                        key={icon.src}
+                        type="button"
+                        onClick={() => setOpenIcon(icon)}
+                        style={{ borderTopColor: color.ring }}
+                        className="group rounded-xl border border-border border-t-4 bg-card p-3 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-95"
+                      >
+                        <img src={icon.src} alt={icon.label} className="mx-auto h-16 w-16 object-contain transition group-hover:scale-110" loading="lazy" />
                         <figcaption className="mt-2">
                           <p className="text-xs font-bold text-card-foreground">{icon.label}</p>
                           <p className="mt-1 text-[11px] leading-snug text-muted-foreground">{icon.caption}</p>
                         </figcaption>
-                      </figure>
+                      </button>
                     );
                   })}
                 </div>
@@ -409,6 +449,7 @@ function Diagrams() {
         })}
       </div>
       <p className="mt-8 text-xs leading-relaxed text-muted-foreground">Reference illustrations are free/public domain (CC0) via Bioicons.com contributors — see public/icons/CREDITS.md. Pathway diagrams are original artwork made for this app.</p>
+      {openIcon && <Lightbox icon={openIcon} color={topicColor(openIcon.topicId)} onClose={() => setOpenIcon(null)} />}
     </section>
   );
 }
