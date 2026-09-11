@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FACTS, TOPICS, type FactItem } from "@/data/facts";
+import { MCQS, type McqItem } from "@/data/mcqs";
 import compoundsData from "@/data/compounds.json";
 import { COMPOUND_NOTES } from "@/data/compound-notes";
 import {
@@ -430,6 +431,120 @@ function FactSheets() {
 }
 
 function Flashcards() {
+  const [mode, setMode] = useState<"cards" | "mcq">("cards");
+  return (
+    <section>
+      <SectionIntro eyebrow="Spaced repetition + NEET PG practice" title="Recall, then reveal" description="Review due cards, or switch to timed multiple-choice practice in the style commonly drilled at Indian coaching centers." />
+      <div className="mb-6 grid grid-cols-2 gap-2 rounded-xl bg-muted p-1 sm:w-80">
+        <Button variant="tab" active={mode === "cards"} onClick={() => setMode("cards")} className={mode === "cards" ? "text-primary shadow-sm" : ""}>
+          <Layers3 size={16} /> Flashcards
+        </Button>
+        <Button variant="tab" active={mode === "mcq"} onClick={() => setMode("mcq")} className={mode === "mcq" ? "text-primary shadow-sm" : ""}>
+          <ClipboardList size={16} /> MCQ Practice
+        </Button>
+      </div>
+      {mode === "cards" ? <FlashcardMode /> : <McqPractice />}
+    </section>
+  );
+}
+
+function McqPractice() {
+  const [topicFilter, setTopicFilter] = useState<string | "all">("all");
+  const [index, setIndex] = useState(0);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [score, setScore] = useState({ correct: 0, attempted: 0 });
+
+  const pool = useMemo(() => MCQS.filter((q) => topicFilter === "all" || q.topicId === topicFilter), [topicFilter]);
+  const current: McqItem | undefined = pool[index % Math.max(pool.length, 1)];
+
+  function changeTopic(value: string) {
+    setTopicFilter(value);
+    setIndex(0);
+    setSelected(null);
+    setScore({ correct: 0, attempted: 0 });
+  }
+
+  function choose(optionId: string) {
+    if (selected || !current) return;
+    setSelected(optionId);
+    setScore((s) => ({ correct: s.correct + (optionId === current.correctOptionId ? 1 : 0), attempted: s.attempted + 1 }));
+  }
+
+  function next() {
+    setSelected(null);
+    setIndex((i) => i + 1);
+  }
+
+  if (!current) return <p className="py-16 text-center text-muted-foreground">No MCQs in this topic yet.</p>;
+  const color = topicColor(current.topicId);
+  const topic = TOPICS.find((t) => t.id === current.topicId);
+
+  return (
+    <div>
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <label className="sr-only" htmlFor="mcq-topic-filter">Filter MCQs by topic</label>
+        <select id="mcq-topic-filter" value={topicFilter} onChange={(e) => changeTopic(e.target.value)} className="min-h-10 rounded-xl border border-input bg-card px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
+          <option value="all">All topics ({MCQS.length})</option>
+          {Array.from(new Set(TOPICS.map((t) => t.unit))).map((unit) => (
+            <optgroup key={unit} label={unit}>
+              {TOPICS.filter((t) => t.unit === unit && MCQS.some((q) => q.topicId === t.id)).map((t) => (
+                <option key={t.id} value={t.id}>{t.name} ({MCQS.filter((q) => q.topicId === t.id).length})</option>
+              ))}
+            </optgroup>
+          ))}
+        </select>
+        <span className="text-xs font-semibold text-muted-foreground">Score: {score.correct}/{score.attempted}</span>
+      </div>
+
+      <div style={{ borderTopColor: color.ring }} className="rounded-2xl border border-border border-t-4 bg-card p-6 shadow-sm sm:p-8">
+        <div className="flex items-center justify-between gap-3">
+          <span style={{ backgroundColor: color.bg, color: color.fg }} className="inline-block rounded-full px-3 py-1 text-xs font-bold">{topic?.name}</span>
+          <span className="text-xs font-medium text-muted-foreground">Q{(index % pool.length) + 1} of {pool.length}</span>
+        </div>
+        <p className="mt-4 font-display text-xl leading-relaxed text-card-foreground sm:text-2xl">{current.question}</p>
+
+        <div className="mt-5 space-y-2">
+          {current.options.map((opt) => {
+            const isCorrect = opt.id === current.correctOptionId;
+            const isSelected = opt.id === selected;
+            let stateClasses = "border-border bg-card hover:bg-muted/50";
+            if (selected) {
+              if (isCorrect) stateClasses = "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/30";
+              else if (isSelected) stateClasses = "border-rose-500 bg-rose-50 dark:bg-rose-950/30";
+            }
+            return (
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => choose(opt.id)}
+                disabled={!!selected}
+                className={`flex w-full items-center gap-3 rounded-xl border-2 p-3 text-left text-sm transition ${stateClasses} disabled:cursor-default`}
+              >
+                <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-bold uppercase">{opt.id}</span>
+                <span className="text-card-foreground">{opt.text}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {selected && (
+          <div className="mt-5 rounded-lg p-4" style={{ backgroundColor: color.bg }}>
+            <p className="text-xs font-bold uppercase tracking-wide" style={{ color: color.fg }}>
+              {selected === current.correctOptionId ? "Correct" : "Not quite"}
+            </p>
+            <p className="mt-1 text-sm leading-relaxed" style={{ color: color.fg }}>{current.explanation}</p>
+          </div>
+        )}
+
+        <div className="mt-5 flex justify-end">
+          <Button onClick={next} disabled={!selected} className="rounded-lg">Next question →</Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FlashcardMode() {
   const [srs, setSrs] = useState<Record<string, ReturnType<typeof getOrInitCard>>>({});
   const [ready, setReady] = useState(false);
   const [flipped, setFlipped] = useState(false);
@@ -465,8 +580,7 @@ function Flashcards() {
   }
 
   return (
-    <section>
-      <SectionIntro eyebrow="Spaced repetition" title="Recall, then reveal" description="Review due cards and rate your recall. Your schedule is saved on this device." />
+    <div>
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <label className="sr-only" htmlFor="topic-filter">Filter flashcards by topic</label>
         <select id="topic-filter" value={topicFilter} onChange={(event) => changeTopic(event.target.value)} className="min-h-10 rounded-xl border border-input bg-card px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
@@ -511,7 +625,7 @@ function Flashcards() {
           )}
         </>
       ) : <p className="py-16 text-center text-muted-foreground">No cards in this topic yet.</p>}
-    </section>
+    </div>
   );
 }
 
