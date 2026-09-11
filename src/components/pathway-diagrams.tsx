@@ -1,6 +1,8 @@
 // Original animated pathway diagrams for study reference.
 // These are hand-built illustrations created for this app — not sourced or
 // traced from any textbook. Colors follow the app's own topic palette.
+import { violet, teal, amber, rose, emerald, blue, magenta, lime } from "@/lib/palette";
+
 
 function Step({ x, y, w = 108, h = 40, label, sub, color }: { x: number; y: number; w?: number; h?: number; label: string; sub?: string; color: { bg: string; fg: string } }) {
   return (
@@ -25,11 +27,6 @@ function ArrowDefs() {
     </defs>
   );
 }
-
-const violet = { bg: "oklch(0.93 0.09 300)", fg: "oklch(0.36 0.17 300)" };
-const teal = { bg: "oklch(0.92 0.08 195)", fg: "oklch(0.34 0.09 210)" };
-const amber = { bg: "oklch(0.92 0.11 75)", fg: "oklch(0.36 0.1 60)" };
-const rose = { bg: "oklch(0.92 0.1 15)", fg: "oklch(0.4 0.16 15)" };
 
 export function GlycolysisDiagram() {
   const steps = [
@@ -102,8 +99,6 @@ export function TCACycleDiagram() {
 }
 
 export function UreaCycleDiagram() {
-  const cytosolic = ["Citrulline", "Argininosuccinate", "Arginine"];
-  const mito = ["Ornithine", "Carbamoyl-P", "Citrulline"];
   return (
     <svg viewBox="0 0 420 260" className="w-full" role="img" aria-label="Urea cycle diagram">
       <ArrowDefs />
@@ -169,11 +164,6 @@ export function ElectronTransportDiagram() {
     </svg>
   );
 }
-
-const emerald = { bg: "oklch(0.92 0.09 155)", fg: "oklch(0.35 0.1 155)" };
-const blue = { bg: "oklch(0.91 0.09 250)", fg: "oklch(0.36 0.12 255)" };
-const magenta = { bg: "oklch(0.91 0.1 340)", fg: "oklch(0.38 0.16 340)" };
-const lime = { bg: "oklch(0.92 0.1 125)", fg: "oklch(0.37 0.11 130)" };
 
 export function HmpShuntDiagram() {
   return (
@@ -1427,7 +1417,6 @@ export function EnzymeInhibitionDiagram() {
 }
 
 export function AllostericRegulationDiagram() {
-  const curve = "M 40 170 C 150 170, 160 30, 260 30 S 380 170, 440 170";
   return (
     <svg viewBox="0 0 460 200" className="w-full" role="img" aria-label="Allosteric enzyme regulation diagram">
       <ArrowDefs />

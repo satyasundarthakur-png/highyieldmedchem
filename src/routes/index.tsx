@@ -15,6 +15,7 @@ import { FACTS, TOPICS, type FactItem } from "@/data/facts";
 import { MCQS, type McqItem } from "@/data/mcqs";
 import compoundsData from "@/data/compounds.json";
 import { COMPOUND_NOTES } from "@/data/compound-notes";
+import { TOPIC_PALETTE } from "@/lib/palette";
 import {
   getOrInitCard,
   isDue,
@@ -102,21 +103,6 @@ interface Compound {
 }
 
 const COMPOUNDS = compoundsData as Compound[];
-
-const TOPIC_PALETTE = [
-  { bg: "oklch(0.93 0.09 300)", fg: "oklch(0.36 0.17 300)", ring: "oklch(0.55 0.19 300)" },
-  { bg: "oklch(0.92 0.08 195)", fg: "oklch(0.34 0.09 210)", ring: "oklch(0.55 0.11 200)" },
-  { bg: "oklch(0.92 0.11 75)", fg: "oklch(0.36 0.1 60)", ring: "oklch(0.62 0.14 75)" },
-  { bg: "oklch(0.92 0.1 15)", fg: "oklch(0.4 0.16 15)", ring: "oklch(0.58 0.19 15)" },
-  { bg: "oklch(0.92 0.09 155)", fg: "oklch(0.35 0.1 155)", ring: "oklch(0.55 0.13 155)" },
-  { bg: "oklch(0.91 0.09 250)", fg: "oklch(0.36 0.12 255)", ring: "oklch(0.5 0.16 250)" },
-  { bg: "oklch(0.92 0.12 45)", fg: "oklch(0.4 0.13 45)", ring: "oklch(0.62 0.17 45)" },
-  { bg: "oklch(0.91 0.1 340)", fg: "oklch(0.38 0.16 340)", ring: "oklch(0.54 0.19 340)" },
-  { bg: "oklch(0.92 0.07 210)", fg: "oklch(0.35 0.09 220)", ring: "oklch(0.57 0.1 210)" },
-  { bg: "oklch(0.92 0.1 125)", fg: "oklch(0.37 0.11 130)", ring: "oklch(0.62 0.14 125)" },
-  { bg: "oklch(0.9 0.1 275)", fg: "oklch(0.34 0.14 278)", ring: "oklch(0.48 0.18 275)" },
-  { bg: "oklch(0.92 0.1 30)", fg: "oklch(0.4 0.14 30)", ring: "oklch(0.6 0.17 30)" },
-];
 
 function topicColor(topicId: string) {
   const index = TOPICS.findIndex((topic) => topic.id === topicId);
