@@ -347,17 +347,34 @@ const DIAGRAMS: { topicId: string; title: string; description: string; Component
   { topicId: "endocrine", title: "Insulin vs Glucagon", description: "The reciprocal hormone see-saw between the fed and fasting state.", Component: InsulinGlucagonDiagram },
 ];
 
-function DiagramCard({ title, description, color, children }: { title: string; description: string; color: { bg: string; fg: string; ring: string }; children: ReactNode }) {
+function DiagramCard({ title, description, color, onExpand, children }: { title: string; description: string; color: { bg: string; fg: string; ring: string }; onExpand: () => void; children: ReactNode }) {
   return (
     <div style={{ borderTopColor: color.ring }} className="rounded-xl border border-border border-t-4 bg-card p-4 shadow-sm sm:p-6">
-      <h3 className="font-display text-xl text-card-foreground">{title}</h3>
-      <p className="mt-1 mb-4 text-sm text-muted-foreground">{description}</p>
-      <div className="overflow-x-auto rounded-lg bg-muted/40 p-3">{children}</div>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h3 className="font-display text-xl text-card-foreground">{title}</h3>
+          <p className="mt-1 mb-4 text-sm text-muted-foreground">{description}</p>
+        </div>
+      </div>
+      <button
+        type="button"
+        onClick={onExpand}
+        aria-label={`Enlarge ${title} diagram`}
+        className="group relative w-full overflow-x-auto rounded-lg bg-muted/40 p-3 text-left transition hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.99]"
+      >
+        {children}
+        <span
+          style={{ backgroundColor: color.bg, color: color.fg }}
+          className="pointer-events-none absolute bottom-2 right-2 rounded-full px-2 py-1 text-[10px] font-bold opacity-0 shadow-sm transition group-hover:opacity-100"
+        >
+          Tap to enlarge
+        </span>
+      </button>
     </div>
   );
 }
 
-function Lightbox({ icon, color, onClose }: { icon: (typeof GALLERY_ICONS)[number]; color: { bg: string; fg: string; ring: string }; onClose: () => void }) {
+function Modal({ title, description, color, onClose, children }: { title: string; description?: string; color: { bg: string; fg: string; ring: string }; onClose: () => void; children: ReactNode }) {
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
@@ -370,18 +387,17 @@ function Lightbox({ icon, color, onClose }: { icon: (typeof GALLERY_ICONS)[numbe
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={icon.label}
+      aria-label={title}
       onClick={onClose}
       className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/60 p-4 backdrop-blur-sm"
     >
       <div
         onClick={(e) => e.stopPropagation()}
         style={{ borderTopColor: color.ring }}
-        className="w-full max-w-sm rounded-2xl border-t-4 border-border bg-card p-6 text-center shadow-xl"
+        className="max-h-[85vh] w-full max-w-3xl overflow-y-auto rounded-2xl border-t-4 border-border bg-card p-6 text-center shadow-xl"
       >
-        <img src={icon.src} alt={icon.label} className="mx-auto h-40 w-40 object-contain sm:h-48 sm:w-48" />
-        <p className="mt-4 text-base font-bold text-card-foreground">{icon.label}</p>
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{icon.caption}</p>
+        {children}
+        {description && <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{description}</p>}
         <Button variant="secondary" onClick={onClose} className="mt-5 rounded-lg">
           Close
         </Button>
@@ -393,12 +409,13 @@ function Lightbox({ icon, color, onClose }: { icon: (typeof GALLERY_ICONS)[numbe
 function Diagrams() {
   const units = Array.from(new Set(TOPICS.map((topic) => topic.unit)));
   const [openIcon, setOpenIcon] = useState<(typeof GALLERY_ICONS)[number] | null>(null);
+  const [openDiagram, setOpenDiagram] = useState<(typeof DIAGRAMS)[number] | null>(null);
   return (
     <section>
       <SectionIntro
         eyebrow={`${DIAGRAMS.length} animated pathway maps`}
         title="See the pathways move"
-        description="Original diagrams built for this app — grouped by the same chapter units as the fact sheets, each with flow direction and rate-limiting steps animated. Tap any reference picture to enlarge it."
+        description="Original diagrams built for this app — grouped by the same chapter units as the fact sheets, each with flow direction and rate-limiting steps animated. Tap any diagram or picture to enlarge it."
       />
       <div className="space-y-10">
         {units.map((unit) => {
@@ -415,7 +432,7 @@ function Diagrams() {
                     const color = topicColor(d.topicId);
                     const D = d.Component;
                     return (
-                      <DiagramCard key={unit + d.title + i} title={d.title} description={d.description} color={color}>
+                      <DiagramCard key={unit + d.title + i} title={d.title} description={d.description} color={color} onExpand={() => setOpenDiagram(d)}>
                         <D />
                       </DiagramCard>
                     );
@@ -449,7 +466,23 @@ function Diagrams() {
         })}
       </div>
       <p className="mt-8 text-xs leading-relaxed text-muted-foreground">Reference illustrations are free/public domain (CC0) via Bioicons.com contributors — see public/icons/CREDITS.md. Pathway diagrams are original artwork made for this app.</p>
-      {openIcon && <Lightbox icon={openIcon} color={topicColor(openIcon.topicId)} onClose={() => setOpenIcon(null)} />}
+
+      {openIcon && (
+        <Modal title={openIcon.label} color={topicColor(openIcon.topicId)} onClose={() => setOpenIcon(null)}>
+          <img src={openIcon.src} alt={openIcon.label} className="mx-auto h-40 w-40 object-contain sm:h-56 sm:w-56" />
+          <p className="mt-4 text-base font-bold text-card-foreground">{openIcon.label}</p>
+          <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{openIcon.caption}</p>
+        </Modal>
+      )}
+
+      {openDiagram && (
+        <Modal title={openDiagram.title} description={openDiagram.description} color={topicColor(openDiagram.topicId)} onClose={() => setOpenDiagram(null)}>
+          <p className="mb-3 text-left font-display text-xl text-card-foreground sm:text-2xl">{openDiagram.title}</p>
+          <div className="rounded-lg bg-muted/40 p-4">
+            <openDiagram.Component />
+          </div>
+        </Modal>
+      )}
     </section>
   );
 }
