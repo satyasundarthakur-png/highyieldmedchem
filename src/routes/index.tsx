@@ -68,6 +68,21 @@ import {
   StarvationTimelineDiagram,
   B12AbsorptionDiagram,
   ElisaWorkflowDiagram,
+  MonosaccharideClassificationDiagram,
+  GlycosidicBondDiagram,
+  ProteinStructureLevelsDiagram,
+  IsoelectricPointDiagram,
+  EnzymeInhibitionDiagram,
+  AllostericRegulationDiagram,
+  MetabolicBlockDisordersDiagram,
+  LysosomalStorageDiseasesDiagram,
+  EnergyBalanceDiagram,
+  ProteinEnergyMalnutritionDiagram,
+  ElastinCrossLinkingDiagram,
+  ProteoglycanAggregateDiagram,
+  FentonReactionDiagram,
+  VitaminClassificationDiagram,
+  VitaminDeficiencyMapDiagram,
 } from "@/components/pathway-diagrams";
 
 type Tab = "sheets" | "flashcards" | "compounds" | "diagrams" | "practical";
@@ -157,7 +172,7 @@ function LandingPage({ onEnter }: { onEnter: (tab: Tab) => void }) {
   const stats = [
     { label: "Chapters", value: "22" },
     { label: "High-yield facts", value: `${FACTS.length}+` },
-    { label: "Animated diagrams", value: "45" },
+    { label: "Animated diagrams", value: "60" },
     { label: "Compounds", value: "99" },
   ];
   const features: { tab: Tab; title: string; description: string; icon: ReactNode; color: { bg: string; fg: string; ring: string } }[] = [
@@ -560,6 +575,21 @@ const DIAGRAMS: { topicId: string; title: string; description: string; pearl: st
   { topicId: "nutrition", title: "Starvation Fuel Metabolism Timeline", description: "How fuel sources shift from glycogen to gluconeogenesis to ketones over a prolonged fast.", pearl: "By minimizing muscle protein breakdown once ketones rise, the body preserves lean mass during prolonged starvation — a survival adaptation exploited (in a controlled way) by therapeutic ketogenic diets.", Component: StarvationTimelineDiagram },
   { topicId: "digestion", title: "Vitamin B12 Absorption", description: "From food-bound B12 to intrinsic-factor-mediated ileal uptake.", pearl: "Pernicious anemia — autoimmune loss of parietal cells or anti-intrinsic-factor antibodies — is the classic cause of B12 deficiency distinct from simple dietary lack (common in strict vegans).", Component: B12AbsorptionDiagram },
   { topicId: "biotech", title: "ELISA Workflow", description: "Plate coating through absorbance reading — the 5-step immunoassay.", pearl: "ELISA remains the front-line screening test for HIV (paired with confirmatory Western blot) and is the basis of quantitative hormone assays like urine hCG pregnancy tests.", Component: ElisaWorkflowDiagram },
+  { topicId: "chem-carb", title: "Monosaccharide Classification", description: "Aldose vs ketose, and how carbon count and epimers/anomers are defined.", pearl: "Glucose and galactose (C4 epimers) are handled by completely different first enzymes — galactokinase vs hexokinase — which is why isolated galactokinase deficiency causes only cataracts, not the severe illness of classic galactosemia.", Component: MonosaccharideClassificationDiagram },
+  { topicId: "chem-carb", title: "Glycosidic Bonds: Starch vs Glycogen vs Cellulose", description: "Same building block, different linkages — and why only some are digestible.", pearl: "Humans lack β-glycosidase, so cellulose (β-1,4 linked) passes through as dietary fiber, while starch and glycogen (α-linked) are fully digestible energy sources.", Component: GlycosidicBondDiagram },
+  { topicId: "chem-protein", title: "Levels of Protein Structure", description: "Primary sequence through quaternary assembly.", pearl: "Prion diseases arise purely from a change in secondary/tertiary structure (α-helix to β-sheet) with no change in amino acid sequence — a rare disease caused entirely by misfolding.", Component: ProteinStructureLevelsDiagram },
+  { topicId: "chem-protein", title: "Amino Acid Titration & Isoelectric Point", description: "How net charge shifts with pH, and what determines the pI.", pearl: "Electrophoretic separation techniques (e.g. hemoglobin electrophoresis for sickle cell trait/disease) work precisely because different proteins have different isoelectric points.", Component: IsoelectricPointDiagram },
+  { topicId: "enzymes", title: "Types of Enzyme Inhibition", description: "Competitive, noncompetitive, uncompetitive, and irreversible — compared side by side.", pearl: "Aspirin is a rare example of irreversible inhibition via covalent modification — it acetylates COX-1/2, permanently disabling that enzyme molecule until new enzyme is synthesized.", Component: EnzymeInhibitionDiagram },
+  { topicId: "enzymes", title: "Allosteric Regulation", description: "Sigmoidal kinetics from cooperative binding — the basis of feedback inhibition.", pearl: "ATP allosterically inhibits phosphofructokinase-1 (glycolysis) while AMP activates it — a direct energy-charge sensor built into the pathway's first committed step.", Component: AllostericRegulationDiagram },
+  { topicId: "iem", title: "Inborn Errors as Metabolic Blocks", description: "PKU, galactosemia, hereditary fructose intolerance, and alkaptonuria — where each pathway breaks.", pearl: "Alkaptonuria (homogentisate oxidase deficiency) is usually benign apart from urine that darkens on standing and late-onset ochronotic arthritis — a good example of a 'mild' inborn error.", Component: MetabolicBlockDisordersDiagram },
+  { topicId: "iem", title: "Lysosomal Storage Diseases", description: "Tay-Sachs, Gaucher, Niemann-Pick, Fabry, Hurler — enzyme and accumulated substrate, side by side.", pearl: "Tay-Sachs classically shows a 'cherry-red spot' on the macula, while Niemann-Pick can show the same finding plus hepatosplenomegaly — a key exam differentiator is organomegaly (present in Niemann-Pick/Gaucher, absent in Tay-Sachs).", Component: LysosomalStorageDiseasesDiagram },
+  { topicId: "nutrition", title: "Energy Balance", description: "Intake vs expenditure — the equation behind weight change.", pearl: "Basal metabolic rate is usually the single largest component of total energy expenditure in a sedentary person, which is why crash dieting (which lowers BMR) often backfires long-term.", Component: EnergyBalanceDiagram },
+  { topicId: "nutrition", title: "Kwashiorkor vs Marasmus", description: "Same root cause (malnutrition), very different biochemistry and appearance.", pearl: "The edema of kwashiorkor is a direct consequence of hypoalbuminemia lowering plasma oncotic pressure — despite the child often looking less 'wasted' than one with marasmus.", Component: ProteinEnergyMalnutritionDiagram },
+  { topicId: "ecm", title: "Elastin Cross-Linking", description: "Tropoelastin to a cross-linked elastic network via lysyl oxidase.", pearl: "Cutis laxa and some forms of aneurysm disease trace back to defective elastin cross-linking — the tissue loses its ability to recoil after stretching.", Component: ElastinCrossLinkingDiagram },
+  { topicId: "ecm", title: "Proteoglycan Aggregate Structure", description: "Hyaluronic acid backbone with aggrecan and GAG side chains.", pearl: "Osteoarthritis involves progressive loss of proteoglycan content in cartilage, reducing its ability to bind water and resist compressive load.", Component: ProteoglycanAggregateDiagram },
+  { topicId: "free-radicals", title: "Fenton Reaction", description: "How Fe²⁺ converts hydrogen peroxide into the highly reactive hydroxyl radical.", pearl: "Hemochromatosis (iron overload) increases free Fe²⁺ available for Fenton chemistry — a key mechanism behind the liver damage, cardiomyopathy, and diabetes seen in the condition.", Component: FentonReactionDiagram },
+  { topicId: "vitamins", title: "Fat-Soluble vs Water-Soluble Vitamins", description: "Storage, toxicity risk, and which vitamins belong in each group.", pearl: "Fat-soluble vitamin toxicity is a real clinical concern (e.g. vitamin A in pregnancy is teratogenic) precisely because these vitamins accumulate in tissue rather than being excreted in urine.", Component: VitaminClassificationDiagram },
+  { topicId: "vitamins", title: "Vitamin Deficiency Clinical Map", description: "Six classic vitamin deficiencies and their signature clinical syndrome.", pearl: "B12 deficiency is the one vitamin deficiency where giving folate alone can worsen outcomes — it corrects the anemia but allows the neurologic damage (subacute combined degeneration) to progress unchecked.", Component: VitaminDeficiencyMapDiagram },
 ];
 
 function ClinicalPearl({ text, color }: { text: string; color: { bg: string; fg: string } }) {

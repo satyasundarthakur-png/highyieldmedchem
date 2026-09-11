@@ -1300,3 +1300,351 @@ export function ElisaWorkflowDiagram() {
     </svg>
   );
 }
+
+export function MonosaccharideClassificationDiagram() {
+  return (
+    <svg viewBox="0 0 460 200" className="w-full" role="img" aria-label="Monosaccharide classification diagram">
+      <ArrowDefs />
+      <rect x="20" y="20" width="420" height="34" rx="8" fill={violet.bg} opacity={0.4} />
+      <text x="230" y="42" textAnchor="middle" fontSize="10.5" fontWeight={700} fill={violet.fg}>Monosaccharide</text>
+
+      <Arrow x1={140} y1={54} x2={100} y2={78} />
+      <Arrow x1={320} y1={54} x2={360} y2={78} />
+      <Step x={30} y={80} w={140} label="Aldose" sub="aldehyde group (glucose)" color={teal} />
+      <Step x={290} y={80} w={140} label="Ketose" sub="ketone group (fructose)" color={amber} />
+
+      <rect x="20" y="135" width="420" height="50" rx="10" fill={rose.bg} opacity={0.4} />
+      <text x="230" y="153" textAnchor="middle" fontSize="9.5" fill={rose.fg}>Also classified by carbon count: triose (3C), tetrose (4C), pentose (5C), hexose (6C)</text>
+      <text x="230" y="171" textAnchor="middle" fontSize="9.5" fill={rose.fg}>Epimers differ at one carbon (glucose/galactose = C4); anomers differ at the anomeric carbon (α/β)</text>
+
+      <circle r="4.5" fill={teal.fg}>
+        <animateMotion dur="4s" repeatCount="indefinite" path="M 230 35 L 100 90" />
+      </circle>
+    </svg>
+  );
+}
+
+export function GlycosidicBondDiagram() {
+  const rows = [
+    { label: "Starch — amylose", sub: "α-1,4 linked, unbranched", color: teal },
+    { label: "Starch — amylopectin", sub: "α-1,4 + α-1,6 branches (~every 24-30)", color: amber },
+    { label: "Glycogen", sub: "α-1,4 + α-1,6 branches (~every 8-10, more compact)", color: rose },
+    { label: "Cellulose", sub: "β-1,4 linked — indigestible by human enzymes", color: violet },
+  ];
+  return (
+    <svg viewBox="0 0 460 190" className="w-full" role="img" aria-label="Glycosidic bond comparison diagram">
+      <ArrowDefs />
+      {rows.map((r, i) => (
+        <g key={r.label}>
+          <rect x={20} y={20 + i * 40} width={420} height={32} rx={8} fill={r.color.bg} opacity={0.45} />
+          <text x={35} y={40 + i * 40} fontSize="10.5" fontWeight={700} fill={r.color.fg}>{r.label}</text>
+          <text x={230} y={40 + i * 40} fontSize="9" fill={r.color.fg}>{r.sub}</text>
+        </g>
+      ))}
+      <circle r="4" fill={amber.fg}>
+        <animateMotion dur="5s" repeatCount="indefinite" path="M 30 36 L 30 76 L 30 116 L 30 156 L 30 36" />
+      </circle>
+    </svg>
+  );
+}
+
+export function ProteinStructureLevelsDiagram() {
+  const levels = [
+    { label: "Primary", sub: "amino acid sequence", color: teal },
+    { label: "Secondary", sub: "α-helix / β-sheet (H-bonds)", color: amber },
+    { label: "Tertiary", sub: "3D fold (side-chain interactions, disulfides)", color: rose },
+    { label: "Quaternary", sub: "multiple subunits assembled", color: violet },
+  ];
+  const colW = 112;
+  return (
+    <svg viewBox={`0 0 ${levels.length * colW + 20} 120`} className="w-full" role="img" aria-label="Levels of protein structure diagram">
+      <ArrowDefs />
+      {levels.map((l, i) => {
+        const x = 10 + i * colW;
+        return (
+          <g key={l.label}>
+            <Step x={x} y={40} w={100} h={44} label={l.label} sub={l.sub} color={l.color} />
+            {i < levels.length - 1 && <Arrow x1={x + 100} y1={62} x2={x + colW - 6} y2={62} />}
+          </g>
+        );
+      })}
+      <circle r="5" fill={violet.fg}>
+        <animateMotion dur="6s" repeatCount="indefinite" path={`M 60 62 ${levels.map((_, i) => `L ${10 + i * colW + 50} 62`).join(" ")}`} />
+      </circle>
+      <text x={(levels.length * colW + 20) / 2} y={20} textAnchor="middle" fontSize="10" fill="var(--color-muted-foreground)">Denaturation disrupts 2°/3°/4° structure but leaves peptide bonds (primary structure) intact</text>
+    </svg>
+  );
+}
+
+export function IsoelectricPointDiagram() {
+  const curve = "M 40 40 C 130 40, 150 160, 240 160 S 350 40, 440 40";
+  return (
+    <svg viewBox="0 0 460 200" className="w-full" role="img" aria-label="Amino acid titration curve and isoelectric point diagram">
+      <ArrowDefs />
+      <line x1="40" y1="170" x2="450" y2="170" stroke="var(--color-muted-foreground)" strokeWidth={1.5} />
+      <line x1="40" y1="170" x2="40" y2="20" stroke="var(--color-muted-foreground)" strokeWidth={1.5} />
+      <text x="245" y="192" textAnchor="middle" fontSize="10" fill="var(--color-muted-foreground)">OH⁻ added →</text>
+      <text x="16" y="95" textAnchor="middle" fontSize="10" fill="var(--color-muted-foreground)" transform="rotate(-90 16 95)">pH →</text>
+      <path d={curve} fill="none" stroke={violet.fg} strokeWidth={2.5} />
+      <line x1="240" y1="20" x2="240" y2="170" stroke={amber.fg} strokeOpacity={0.5} strokeDasharray="4 4" />
+      <text x="240" y="14" textAnchor="middle" fontSize="10" fontWeight={700} fill={amber.fg}>pI (net charge = 0)</text>
+      <circle r="5" fill={violet.fg}>
+        <animateMotion dur="5s" repeatCount="indefinite" path={curve} />
+      </circle>
+      <text x="245" y="188" textAnchor="middle" fontSize="0.001" opacity={0}>.</text>
+      <text x="130" y="60" fontSize="9" fill={teal.fg}>net +</text>
+      <text x="350" y="150" fontSize="9" fill={rose.fg}>net −</text>
+      <text x="245" y="20" textAnchor="middle" fontSize="9.5" fill="var(--color-muted-foreground)" opacity={0}> </text>
+    </svg>
+  );
+}
+
+export function EnzymeInhibitionDiagram() {
+  return (
+    <svg viewBox="0 0 460 200" className="w-full" role="img" aria-label="Types of enzyme inhibition diagram">
+      <ArrowDefs />
+      <rect x="20" y="20" width="200" height="70" rx="10" fill={teal.bg} opacity={0.45} />
+      <text x="120" y="42" textAnchor="middle" fontSize="10.5" fontWeight={700} fill={teal.fg}>Competitive</text>
+      <text x="120" y="58" textAnchor="middle" fontSize="9" fill={teal.fg}>↑Km, Vmax unchanged</text>
+      <text x="120" y="73" textAnchor="middle" fontSize="9" fill={teal.fg}>overcome by ↑[substrate]</text>
+
+      <rect x="240" y="20" width="200" height="70" rx="10" fill={amber.bg} opacity={0.45} />
+      <text x="340" y="42" textAnchor="middle" fontSize="10.5" fontWeight={700} fill={amber.fg}>Noncompetitive</text>
+      <text x="340" y="58" textAnchor="middle" fontSize="9" fill={amber.fg}>Km unchanged, ↓Vmax</text>
+      <text x="340" y="73" textAnchor="middle" fontSize="9" fill={amber.fg}>binds a site other than active site</text>
+
+      <rect x="20" y="105" width="200" height="70" rx="10" fill={rose.bg} opacity={0.45} />
+      <text x="120" y="127" textAnchor="middle" fontSize="10.5" fontWeight={700} fill={rose.fg}>Uncompetitive</text>
+      <text x="120" y="143" textAnchor="middle" fontSize="9" fill={rose.fg}>↓Km and ↓Vmax</text>
+      <text x="120" y="158" textAnchor="middle" fontSize="9" fill={rose.fg}>binds only the ES complex</text>
+
+      <rect x="240" y="105" width="200" height="70" rx="10" fill={violet.bg} opacity={0.45} />
+      <text x="340" y="127" textAnchor="middle" fontSize="10.5" fontWeight={700} fill={violet.fg}>Irreversible</text>
+      <text x="340" y="143" textAnchor="middle" fontSize="9" fill={violet.fg}>covalent modification</text>
+      <text x="340" y="158" textAnchor="middle" fontSize="9" fill={violet.fg}>e.g. aspirin on COX (acetylation)</text>
+    </svg>
+  );
+}
+
+export function AllostericRegulationDiagram() {
+  const curve = "M 40 170 C 150 170, 160 30, 260 30 S 380 170, 440 170";
+  return (
+    <svg viewBox="0 0 460 200" className="w-full" role="img" aria-label="Allosteric enzyme regulation diagram">
+      <ArrowDefs />
+      <line x1="40" y1="180" x2="450" y2="180" stroke="var(--color-muted-foreground)" strokeWidth={1.5} />
+      <line x1="40" y1="180" x2="40" y2="20" stroke="var(--color-muted-foreground)" strokeWidth={1.5} />
+      <path d="M 40 170 C 90 60, 220 40, 420 38" fill="none" stroke={teal.fg} strokeOpacity={0.4} strokeWidth={2} strokeDasharray="4 3" />
+      <text x="380" y="30" fontSize="8.5" fill={teal.fg}>Michaelis-Menten (hyperbolic)</text>
+      <path d="M 40 175 C 140 175, 170 30, 260 30 C 320 30, 380 100, 430 38" fill="none" stroke={violet.fg} strokeWidth={2.5} />
+      <text x="150" y="120" fontSize="9" fontWeight={700} fill={violet.fg}>Allosteric enzyme (sigmoidal)</text>
+      <text x="245" y="196" textAnchor="middle" fontSize="9.5" fill="var(--color-muted-foreground)">[Substrate] →</text>
+      <circle r="5" fill={violet.fg}>
+        <animateMotion dur="5s" repeatCount="indefinite" path="M 40 175 C 140 175, 170 30, 260 30 C 320 30, 380 100, 430 38" />
+      </circle>
+      <text x="245" y="14" textAnchor="middle" fontSize="10" fill="var(--color-muted-foreground)">Cooperative binding gives a sigmoidal curve — the basis of feedback (end-product) inhibition, e.g. ATP inhibiting PFK-1</text>
+    </svg>
+  );
+}
+
+export function MetabolicBlockDisordersDiagram() {
+  const rows = [
+    { label: "Phenylalanine → Tyrosine blocked", sub: "PAH deficiency → PKU", color: teal },
+    { label: "Galactose-1-P → Glucose-1-P blocked", sub: "GALT deficiency → Galactosemia", color: amber },
+    { label: "Fructose-1-P → DHAP + G3P blocked", sub: "Aldolase B deficiency → HFI", color: rose },
+    { label: "Homogentisate oxidation blocked", sub: "Homogentisate oxidase deficiency → Alkaptonuria", color: violet },
+  ];
+  return (
+    <svg viewBox="0 0 460 190" className="w-full" role="img" aria-label="Inborn errors as metabolic blocks diagram">
+      <ArrowDefs />
+      {rows.map((r, i) => (
+        <g key={r.label}>
+          <rect x={20} y={20 + i * 40} width={420} height={32} rx={8} fill={r.color.bg} opacity={0.45} />
+          <text x={35} y={40 + i * 40} fontSize="9.5" fontWeight={700} fill={r.color.fg}>{r.label}</text>
+          <text x={430} y={40 + i * 40} textAnchor="end" fontSize="9" fill={r.color.fg}>{r.sub}</text>
+        </g>
+      ))}
+      <circle r="4" fill={amber.fg}>
+        <animateMotion dur="5s" repeatCount="indefinite" path="M 30 36 L 30 76 L 30 116 L 30 156 L 30 36" />
+      </circle>
+    </svg>
+  );
+}
+
+export function LysosomalStorageDiseasesDiagram() {
+  const rows = [
+    { disease: "Tay-Sachs", enzyme: "Hexosaminidase A", accumulates: "GM2 ganglioside", color: teal },
+    { disease: "Gaucher", enzyme: "Glucocerebrosidase", accumulates: "Glucocerebroside", color: amber },
+    { disease: "Niemann-Pick", enzyme: "Sphingomyelinase", accumulates: "Sphingomyelin", color: rose },
+    { disease: "Fabry", enzyme: "α-galactosidase A", accumulates: "Ceramide trihexoside", color: violet },
+    { disease: "Hurler", enzyme: "α-L-iduronidase", accumulates: "Heparan/dermatan sulfate", color: emerald },
+  ];
+  return (
+    <svg viewBox="0 0 460 210" className="w-full" role="img" aria-label="Lysosomal storage diseases diagram">
+      <ArrowDefs />
+      <text x="130" y="16" fontSize="9" fontWeight={700} fill="var(--color-muted-foreground)">Disease</text>
+      <text x="290" y="16" fontSize="9" fontWeight={700} fill="var(--color-muted-foreground)">Enzyme deficient</text>
+      <text x="420" y="16" fontSize="9" fontWeight={700} fill="var(--color-muted-foreground)" textAnchor="end">Accumulates</text>
+      {rows.map((r, i) => (
+        <g key={r.disease}>
+          <rect x={20} y={22 + i * 36} width={420} height={30} rx={7} fill={r.color.bg} opacity={0.4} />
+          <text x={30} y={41 + i * 36} fontSize="9.5" fontWeight={700} fill={r.color.fg}>{r.disease}</text>
+          <text x={230} y={41 + i * 36} textAnchor="middle" fontSize="9" fill={r.color.fg}>{r.enzyme}</text>
+          <text x={430} y={41 + i * 36} textAnchor="end" fontSize="9" fill={r.color.fg}>{r.accumulates}</text>
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+export function EnergyBalanceDiagram() {
+  return (
+    <svg viewBox="0 0 460 170" className="w-full" role="img" aria-label="Energy balance diagram">
+      <ArrowDefs />
+      <Step x={20} y={20} w={170} label="Energy intake" sub="food & drink" color={emerald} />
+      <text x="230" y="45" textAnchor="middle" fontSize="16" fontWeight={700} fill="var(--color-muted-foreground)">vs</text>
+      <Step x={270} y={20} w={170} label="Energy expenditure" sub="BMR + activity + thermic effect" color={rose} />
+
+      <rect x="20" y="80" width="420" height="76" rx="10" fill={amber.bg} opacity={0.4} />
+      <text x="230" y="100" textAnchor="middle" fontSize="10" fontWeight={700} fill={amber.fg}>Intake &gt; Expenditure → weight gain (positive balance)</text>
+      <text x="230" y="118" textAnchor="middle" fontSize="10" fontWeight={700} fill={amber.fg}>Intake &lt; Expenditure → weight loss (negative balance)</text>
+      <text x="230" y="140" textAnchor="middle" fontSize="9.5" fill={amber.fg}>BMR is the largest component of expenditure in most sedentary people (~60-70%)</text>
+
+      <circle r="4.5" fill={violet.fg}>
+        <animateMotion dur="4s" repeatCount="indefinite" path="M 105 40 L 355 40" />
+      </circle>
+    </svg>
+  );
+}
+
+export function ProteinEnergyMalnutritionDiagram() {
+  return (
+    <svg viewBox="0 0 460 190" className="w-full" role="img" aria-label="Kwashiorkor vs marasmus comparison diagram">
+      <ArrowDefs />
+      <rect x="20" y="20" width="200" height="150" rx="12" fill={rose.bg} opacity={0.4} />
+      <text x="120" y="42" textAnchor="middle" fontSize="11" fontWeight={700} fill={rose.fg}>Kwashiorkor</text>
+      <text x="120" y="62" textAnchor="middle" fontSize="9" fill={rose.fg}>Protein deficiency,</text>
+      <text x="120" y="76" textAnchor="middle" fontSize="9" fill={rose.fg}>adequate calories</text>
+      <text x="120" y="98" textAnchor="middle" fontSize="9" fill={rose.fg}>Edema (↓oncotic pressure)</text>
+      <text x="120" y="114" textAnchor="middle" fontSize="9" fill={rose.fg}>Fatty liver</text>
+      <text x="120" y="130" textAnchor="middle" fontSize="9" fill={rose.fg}>Hypoalbuminemia</text>
+      <text x="120" y="146" textAnchor="middle" fontSize="9" fill={rose.fg}>"Flaky paint" skin lesions</text>
+
+      <rect x="240" y="20" width="200" height="150" rx="12" fill={teal.bg} opacity={0.4} />
+      <text x="340" y="42" textAnchor="middle" fontSize="11" fontWeight={700} fill={teal.fg}>Marasmus</text>
+      <text x="340" y="62" textAnchor="middle" fontSize="9" fill={teal.fg}>Total calorie-protein</text>
+      <text x="340" y="76" textAnchor="middle" fontSize="9" fill={teal.fg}>deficiency</text>
+      <text x="340" y="98" textAnchor="middle" fontSize="9" fill={teal.fg}>Severe wasting, no edema</text>
+      <text x="340" y="114" textAnchor="middle" fontSize="9" fill={teal.fg}>"Old man" facies</text>
+      <text x="340" y="130" textAnchor="middle" fontSize="9" fill={teal.fg}>Muscle/fat loss</text>
+      <text x="340" y="146" textAnchor="middle" fontSize="9" fill={teal.fg}>Preserved albumin (relatively)</text>
+    </svg>
+  );
+}
+
+export function ElastinCrossLinkingDiagram() {
+  return (
+    <svg viewBox="0 0 460 170" className="w-full" role="img" aria-label="Elastin desmosine cross-linking diagram">
+      <ArrowDefs />
+      <Step x={20} y={20} w={160} label="Tropoelastin" sub="soluble precursor" color={teal} />
+      <Arrow x1={180} y1={40} x2={208} y2={40} />
+      <text x="194" y="32" textAnchor="middle" fontSize="8" fontWeight={700} fill={amber.fg}>Lysyl oxidase (Cu²⁺)</text>
+      <Step x={210} y={20} w={230} label="Cross-linked elastin network" sub="desmosine bonds between lysines" color={amber} />
+
+      <rect x="20" y="90" width="420" height="60" rx="10" fill={violet.bg} opacity={0.4} />
+      <text x="230" y="110" textAnchor="middle" fontSize="10" fill={violet.fg}>Unlike collagen, tropoelastin lacks hydroxyproline/hydroxylysine — no vitamin C dependence</text>
+      <text x="230" y="130" textAnchor="middle" fontSize="9.5" fill={violet.fg}>Gives lungs, large arteries, and ligaments their reversible stretch/recoil</text>
+
+      <circle r="4.5" fill={amber.fg}>
+        <animateMotion dur="4s" repeatCount="indefinite" path="M 100 40 L 325 40" />
+      </circle>
+    </svg>
+  );
+}
+
+export function ProteoglycanAggregateDiagram() {
+  return (
+    <svg viewBox="0 0 460 180" className="w-full" role="img" aria-label="Proteoglycan aggregate structure diagram">
+      <ArrowDefs />
+      <line x1="40" y1="90" x2="420" y2="90" stroke={violet.fg} strokeWidth={4} strokeOpacity={0.5} />
+      <text x="230" y="75" textAnchor="middle" fontSize="9.5" fontWeight={700} fill={violet.fg}>Hyaluronic acid backbone</text>
+      {[80, 160, 240, 320, 400].map((x, i) => (
+        <g key={i}>
+          <line x1={x} y1="90" x2={x} y2="140" stroke={teal.fg} strokeWidth={3} strokeOpacity={0.6} />
+          <circle cx={x} cy="145" r="10" fill={amber.bg} stroke={amber.fg} strokeOpacity={0.5} />
+        </g>
+      ))}
+      <text x="230" y="165" textAnchor="middle" fontSize="9" fill={teal.fg}>Aggrecan core proteins (via link proteins) + GAG side chains (chondroitin/keratan sulfate)</text>
+      <text x="230" y="30" textAnchor="middle" fontSize="10" fill="var(--color-muted-foreground)">Negative charge of GAGs attracts water → gives cartilage its compressive resistance</text>
+      <circle r="4.5" fill={violet.fg}>
+        <animateMotion dur="4s" repeatCount="indefinite" path="M 40 90 L 420 90" />
+      </circle>
+    </svg>
+  );
+}
+
+export function FentonReactionDiagram() {
+  return (
+    <svg viewBox="0 0 460 170" className="w-full" role="img" aria-label="Fenton reaction diagram">
+      <ArrowDefs />
+      <Step x={20} y={50} w={130} label="H₂O₂ + Fe²⁺" color={teal} />
+      <Arrow x1={150} y1={70} x2={178} y2={70} />
+      <Step x={180} y={50} w={140} label="•OH + OH⁻ + Fe³⁺" sub="hydroxyl radical" color={rose} />
+      <Arrow x1={320} y1={70} x2={348} y2={70} />
+      <Step x={350} y={50} w={100} label="Lipid/DNA damage" color={violet} />
+
+      <rect x="20" y="110" width="420" height="46" rx="10" fill={amber.bg} opacity={0.4} />
+      <text x="230" y="130" textAnchor="middle" fontSize="10" fill={amber.fg}>The hydroxyl radical (•OH) is the most reactive ROS — causes lipid peroxidation and DNA strand breaks</text>
+      <text x="230" y="147" textAnchor="middle" fontSize="9.5" fill={amber.fg}>Iron overload (hemochromatosis) increases free Fe²⁺, fueling Fenton chemistry and tissue damage</text>
+
+      <circle r="4.5" fill={rose.fg}>
+        <animateMotion dur="4s" repeatCount="indefinite" path="M 85 70 L 250 70 L 400 70" />
+      </circle>
+    </svg>
+  );
+}
+
+export function VitaminClassificationDiagram() {
+  const fatSoluble = ["A", "D", "E", "K"];
+  const waterSoluble = ["B1", "B2", "B3", "B6", "B12", "Folate", "C"];
+  return (
+    <svg viewBox="0 0 460 190" className="w-full" role="img" aria-label="Fat-soluble vs water-soluble vitamins diagram">
+      <ArrowDefs />
+      <rect x="20" y="20" width="200" height="150" rx="12" fill={amber.bg} opacity={0.4} />
+      <text x="120" y="42" textAnchor="middle" fontSize="11" fontWeight={700} fill={amber.fg}>Fat-soluble</text>
+      <text x="120" y="60" textAnchor="middle" fontSize="9" fill={amber.fg}>Stored in liver/fat — risk of toxicity</text>
+      {fatSoluble.map((v, i) => (
+        <text key={v} x="120" y={82 + i * 20} textAnchor="middle" fontSize="10" fontWeight={700} fill={amber.fg}>{v}</text>
+      ))}
+
+      <rect x="240" y="20" width="200" height="150" rx="12" fill={teal.bg} opacity={0.4} />
+      <text x="340" y="42" textAnchor="middle" fontSize="11" fontWeight={700} fill={teal.fg}>Water-soluble</text>
+      <text x="340" y="60" textAnchor="middle" fontSize="9" fill={teal.fg}>Excreted in urine — rarely toxic</text>
+      {waterSoluble.map((v, i) => (
+        <text key={v} x="340" y={78 + i * 15} textAnchor="middle" fontSize="9.5" fontWeight={700} fill={teal.fg}>{v}</text>
+      ))}
+    </svg>
+  );
+}
+
+export function VitaminDeficiencyMapDiagram() {
+  const items = [
+    { v: "B1 (Thiamine)", d: "Beriberi, Wernicke-Korsakoff" },
+    { v: "B2 (Riboflavin)", d: "Angular stomatitis, glossitis" },
+    { v: "B3 (Niacin)", d: "Pellagra — dermatitis, diarrhea, dementia" },
+    { v: "B6 (Pyridoxine)", d: "Sideroblastic anemia, neuropathy" },
+    { v: "B12 (Cobalamin)", d: "Megaloblastic anemia + subacute cord degeneration" },
+    { v: "C (Ascorbic acid)", d: "Scurvy — poor wound healing, bleeding gums" },
+  ];
+  return (
+    <svg viewBox="0 0 460 210" className="w-full" role="img" aria-label="Vitamin deficiency clinical correlation diagram">
+      <ArrowDefs />
+      {items.map((it, i) => (
+        <g key={it.v}>
+          <rect x={20} y={20 + i * 31} width={420} height={26} rx={7} fill={[teal, amber, rose, violet, emerald, magenta][i % 6]!.bg} opacity={0.4} />
+          <text x={30} y={38 + i * 31} fontSize="9.5" fontWeight={700} fill={[teal, amber, rose, violet, emerald, magenta][i % 6]!.fg}>{it.v}</text>
+          <text x={430} y={38 + i * 31} textAnchor="end" fontSize="9" fill={[teal, amber, rose, violet, emerald, magenta][i % 6]!.fg}>{it.d}</text>
+        </g>
+      ))}
+    </svg>
+  );
+}
