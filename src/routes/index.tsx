@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   ArrowLeft,
   BookOpen,
+  ExternalLink,
   FlaskConical,
   Layers3,
   Search,
@@ -192,6 +193,39 @@ function SectionIntro({ eyebrow, title, description }: { eyebrow: string; title:
   );
 }
 
+function FurtherReading({ topicName, color }: { topicName: string; color: { bg: string; fg: string } }) {
+  const q = encodeURIComponent(topicName);
+  const links = [
+    { label: "Wikipedia", sub: "quick overview & references", href: `https://en.wikipedia.org/wiki/Special:Search?search=${q}&go=Go` },
+    { label: "NCBI Bookshelf", sub: "free full-text biochemistry textbooks (Berg, Lehninger excerpts)", href: `https://www.ncbi.nlm.nih.gov/books/?term=${q}` },
+    { label: "LibreTexts Chemistry", sub: "open-access biochemistry course text", href: `https://chem.libretexts.org/Search?query=${q}` },
+  ];
+  return (
+    <div className="mt-6 rounded-xl border border-border bg-card p-4 sm:p-5">
+      <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Want the full text? Read further, free</p>
+      <div className="mt-3 grid gap-2 sm:grid-cols-3">
+        {links.map((link) => (
+          <a
+            key={link.label}
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ borderTopColor: color.fg }}
+            className="group flex flex-col gap-1 rounded-lg border border-border border-t-4 bg-muted/40 p-3 text-sm transition hover:brightness-95"
+          >
+            <span className="flex items-center gap-1.5 font-bold text-card-foreground">
+              {link.label}
+              <ExternalLink size={12} className="opacity-60" />
+            </span>
+            <span className="text-xs leading-snug text-muted-foreground">{link.sub}</span>
+          </a>
+        ))}
+      </div>
+      <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">These search directly on each free, open-access resource for "{topicName}" — no login or purchase needed.</p>
+    </div>
+  );
+}
+
 function FactSheets() {
   const [topicId, setTopicId] = useState<string | null>(null);
 
@@ -259,6 +293,7 @@ function FactSheets() {
           </li>
         ))}
       </ol>
+      <FurtherReading topicName={topic.name} color={color} />
     </section>
   );
 }
