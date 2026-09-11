@@ -1648,3 +1648,120 @@ export function VitaminDeficiencyMapDiagram() {
     </svg>
   );
 }
+
+export function RaasDiagram() {
+  const steps = ["Angiotensinogen\n(liver)", "Angiotensin I\n(renin, kidney)", "Angiotensin II\n(ACE, lungs)", "Vasoconstriction +\nAldosterone release"];
+  const colW = 116;
+  return (
+    <svg viewBox="0 0 480 130" className="w-full" role="img" aria-label="Renin-angiotensin-aldosterone system diagram">
+      <ArrowDefs />
+      {steps.map((s, i) => {
+        const x = 10 + i * colW;
+        return (
+          <g key={s}>
+            <Step x={x} y={45} w={102} h={44} label={s.split("\n")[0]!} sub={s.split("\n")[1] ?? ""} color={i === 3 ? amber : teal} />
+            {i < steps.length - 1 && <Arrow x1={x + 102} y1={67} x2={x + colW - 6} y2={67} />}
+          </g>
+        );
+      })}
+      <circle r="5" fill={teal.fg}>
+        <animateMotion dur="6s" repeatCount="indefinite" path={`M 61 67 ${steps.map((_, i) => `L ${10 + i * colW + 51} 67`).join(" ")}`} />
+      </circle>
+      <text x="240" y="20" textAnchor="middle" fontSize="10" fill="var(--color-muted-foreground)">ACE inhibitors (-prils) and ARBs (-sartans) block this axis — first-line for hypertension and CKD proteinuria</text>
+      <text x="240" y="112" textAnchor="middle" fontSize="9.5" fill="var(--color-muted-foreground)">Aldosterone increases Na⁺/water reabsorption and K⁺/H⁺ excretion in the distal nephron</text>
+    </svg>
+  );
+}
+
+export function ChromosomalDisordersDiagram() {
+  const rows = [
+    { label: "Down syndrome", sub: "Trisomy 21 — most common autosomal trisomy", color: teal },
+    { label: "Edwards syndrome", sub: "Trisomy 18 — severe, often lethal in infancy", color: amber },
+    { label: "Patau syndrome", sub: "Trisomy 13 — severe midline defects", color: rose },
+    { label: "Klinefelter syndrome", sub: "47,XXY — tall, infertile males", color: violet },
+    { label: "Turner syndrome", sub: "45,X0 — short stature, webbed neck, streak ovaries", color: emerald },
+  ];
+  return (
+    <svg viewBox="0 0 460 210" className="w-full" role="img" aria-label="Common chromosomal disorders diagram">
+      <ArrowDefs />
+      {rows.map((r, i) => (
+        <g key={r.label}>
+          <rect x={20} y={20 + i * 36} width={420} height={30} rx={7} fill={r.color.bg} opacity={0.4} />
+          <text x={30} y={39 + i * 36} fontSize="9.5" fontWeight={700} fill={r.color.fg}>{r.label}</text>
+          <text x={430} y={39 + i * 36} textAnchor="end" fontSize="9" fill={r.color.fg}>{r.sub}</text>
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+export function OncogeneTumorSuppressorDiagram() {
+  return (
+    <svg viewBox="0 0 460 190" className="w-full" role="img" aria-label="Oncogenes vs tumor suppressor genes diagram">
+      <ArrowDefs />
+      <rect x="20" y="20" width="200" height="150" rx="12" fill={rose.bg} opacity={0.4} />
+      <text x="120" y="42" textAnchor="middle" fontSize="11" fontWeight={700} fill={rose.fg}>Oncogenes</text>
+      <text x="120" y="62" textAnchor="middle" fontSize="9" fill={rose.fg}>e.g. RAS, MYC, HER2</text>
+      <text x="120" y="86" textAnchor="middle" fontSize="9" fill={rose.fg}>Mutated proto-oncogenes</text>
+      <text x="120" y="104" textAnchor="middle" fontSize="9" fill={rose.fg}>"Gain of function"</text>
+      <text x="120" y="126" textAnchor="middle" fontSize="9" fontWeight={700} fill={rose.fg}>Dominant</text>
+      <text x="120" y="144" textAnchor="middle" fontSize="9" fill={rose.fg}>1 mutated allele is enough</text>
+
+      <rect x="240" y="20" width="200" height="150" rx="12" fill={teal.bg} opacity={0.4} />
+      <text x="340" y="42" textAnchor="middle" fontSize="11" fontWeight={700} fill={teal.fg}>Tumor suppressor genes</text>
+      <text x="340" y="62" textAnchor="middle" fontSize="9" fill={teal.fg}>e.g. p53, RB, BRCA1/2</text>
+      <text x="340" y="86" textAnchor="middle" fontSize="9" fill={teal.fg}>Normally restrain division</text>
+      <text x="340" y="104" textAnchor="middle" fontSize="9" fill={teal.fg}>"Loss of function"</text>
+      <text x="340" y="126" textAnchor="middle" fontSize="9" fontWeight={700} fill={teal.fg}>Recessive at the cell level</text>
+      <text x="340" y="144" textAnchor="middle" fontSize="9" fill={teal.fg}>Both alleles must be lost (Knudson 2-hit)</text>
+    </svg>
+  );
+}
+
+export function TumorMarkersDiagram() {
+  const rows = [
+    { marker: "AFP", cancer: "Hepatocellular carcinoma, germ cell tumors", color: teal },
+    { marker: "CEA", cancer: "Colorectal cancer", color: amber },
+    { marker: "CA-125", cancer: "Ovarian cancer", color: rose },
+    { marker: "PSA", cancer: "Prostate cancer", color: violet },
+    { marker: "CA 19-9", cancer: "Pancreatic cancer", color: emerald },
+    { marker: "β-hCG", cancer: "Choriocarcinoma, germ cell tumors", color: magenta },
+  ];
+  return (
+    <svg viewBox="0 0 460 220" className="w-full" role="img" aria-label="Tumor markers diagram">
+      <ArrowDefs />
+      {rows.map((r, i) => (
+        <g key={r.marker}>
+          <rect x={20} y={20 + i * 32} width={420} height={26} rx={7} fill={r.color.bg} opacity={0.4} />
+          <text x={35} y={38 + i * 32} fontSize="10" fontWeight={700} fill={r.color.fg}>{r.marker}</text>
+          <text x={430} y={38 + i * 32} textAnchor="end" fontSize="9" fill={r.color.fg}>{r.cancer}</text>
+        </g>
+      ))}
+      <text x="230" y="212" textAnchor="middle" fontSize="9" fill="var(--color-muted-foreground)">Used mainly for monitoring treatment response/recurrence — not for primary screening (low specificity)</text>
+    </svg>
+  );
+}
+
+export function ThyroidFunctionTestsDiagram() {
+  return (
+    <svg viewBox="0 0 460 190" className="w-full" role="img" aria-label="Thyroid function test interpretation diagram">
+      <ArrowDefs />
+      <rect x="20" y="20" width="420" height="30" rx="7" fill={violet.bg} opacity={0.4} />
+      <text x="230" y="40" textAnchor="middle" fontSize="10" fontWeight={700} fill={violet.fg}>Pattern → Interpretation</text>
+
+      <rect x="20" y="58" width="420" height="30" rx="7" fill={rose.bg} opacity={0.4} />
+      <text x="30" y="78" fontSize="9.5" fontWeight={700} fill={rose.fg}>↑TSH, ↓T4</text>
+      <text x="430" y="78" textAnchor="end" fontSize="9.5" fill={rose.fg}>Primary hypothyroidism</text>
+
+      <rect x="20" y="93" width="420" height="30" rx="7" fill={teal.bg} opacity={0.4} />
+      <text x="30" y="113" fontSize="9.5" fontWeight={700} fill={teal.fg}>↓TSH, ↑T4</text>
+      <text x="430" y="113" textAnchor="end" fontSize="9.5" fill={teal.fg}>Primary hyperthyroidism</text>
+
+      <rect x="20" y="128" width="420" height="30" rx="7" fill={amber.bg} opacity={0.4} />
+      <text x="30" y="148" fontSize="9.5" fontWeight={700} fill={amber.fg}>↑TSH, normal T4</text>
+      <text x="430" y="148" textAnchor="end" fontSize="9.5" fill={amber.fg}>Subclinical hypothyroidism</text>
+
+      <text x="230" y="180" textAnchor="middle" fontSize="9" fill="var(--color-muted-foreground)">TSH is the most sensitive first-line screening test in most clinical settings</text>
+    </svg>
+  );
+}

@@ -83,6 +83,11 @@ import {
   FentonReactionDiagram,
   VitaminClassificationDiagram,
   VitaminDeficiencyMapDiagram,
+  RaasDiagram,
+  ChromosomalDisordersDiagram,
+  OncogeneTumorSuppressorDiagram,
+  TumorMarkersDiagram,
+  ThyroidFunctionTestsDiagram,
 } from "@/components/pathway-diagrams";
 
 type Tab = "sheets" | "flashcards" | "compounds" | "diagrams" | "practical";
@@ -172,7 +177,7 @@ function LandingPage({ onEnter }: { onEnter: (tab: Tab) => void }) {
   const stats = [
     { label: "Chapters", value: "22" },
     { label: "High-yield facts", value: `${FACTS.length}+` },
-    { label: "Animated diagrams", value: "60" },
+    { label: "Animated diagrams", value: "65" },
     { label: "Compounds", value: "99" },
   ];
   const features: { tab: Tab; title: string; description: string; icon: ReactNode; color: { bg: string; fg: string; ring: string } }[] = [
@@ -590,6 +595,11 @@ const DIAGRAMS: { topicId: string; title: string; description: string; pearl: st
   { topicId: "free-radicals", title: "Fenton Reaction", description: "How Fe²⁺ converts hydrogen peroxide into the highly reactive hydroxyl radical.", pearl: "Hemochromatosis (iron overload) increases free Fe²⁺ available for Fenton chemistry — a key mechanism behind the liver damage, cardiomyopathy, and diabetes seen in the condition.", Component: FentonReactionDiagram },
   { topicId: "vitamins", title: "Fat-Soluble vs Water-Soluble Vitamins", description: "Storage, toxicity risk, and which vitamins belong in each group.", pearl: "Fat-soluble vitamin toxicity is a real clinical concern (e.g. vitamin A in pregnancy is teratogenic) precisely because these vitamins accumulate in tissue rather than being excreted in urine.", Component: VitaminClassificationDiagram },
   { topicId: "vitamins", title: "Vitamin Deficiency Clinical Map", description: "Six classic vitamin deficiencies and their signature clinical syndrome.", pearl: "B12 deficiency is the one vitamin deficiency where giving folate alone can worsen outcomes — it corrects the anemia but allows the neurologic damage (subacute combined degeneration) to progress unchecked.", Component: VitaminDeficiencyMapDiagram },
+  { topicId: "water-electrolyte", title: "Renin-Angiotensin-Aldosterone System", description: "Liver, kidney, and lungs cooperate to raise blood pressure and retain sodium.", pearl: "ACE inhibitors and ARBs are first-line for both hypertension and diabetic nephropathy — blocking this axis reduces intraglomerular pressure and slows proteinuric kidney disease.", Component: RaasDiagram },
+  { topicId: "molbio", title: "Common Chromosomal Disorders", description: "The trisomies and sex-chromosome aneuploidies tested most often.", pearl: "Down syndrome risk rises sharply after maternal age 35 — the biochemical screening triple/quad test combines maternal serum AFP, hCG, estriol, and inhibin-A to estimate risk before invasive testing.", Component: ChromosomalDisordersDiagram },
+  { topicId: "molbio", title: "Oncogenes vs Tumor Suppressor Genes", description: "Gain-of-function, dominant oncogenes vs loss-of-function, recessive tumor suppressors.", pearl: "BRCA1/2 mutations are tumor suppressor gene defects — inheriting one nonfunctional allele isn't enough to cause cancer alone, but it makes losing the second (somatic) allele, and therefore cancer, far more likely.", Component: OncogeneTumorSuppressorDiagram },
+  { topicId: "organ-function", title: "Tumor Markers", description: "Which marker pairs with which cancer, for monitoring rather than screening.", pearl: "A rising tumor marker after treatment is one of the earliest signs of cancer recurrence, often preceding imaging changes — which is why these are used for surveillance, not diagnosis.", Component: TumorMarkersDiagram },
+  { topicId: "organ-function", title: "Thyroid Function Test Interpretation", description: "Reading TSH/T4 patterns to localize primary vs subclinical thyroid disease.", pearl: "In secondary (pituitary) hypothyroidism, both TSH and T4 are low — a pattern easy to miss if you only check TSH, which is why free T4 is added when pituitary disease is suspected.", Component: ThyroidFunctionTestsDiagram },
 ];
 
 function ClinicalPearl({ text, color }: { text: string; color: { bg: string; fg: string } }) {
