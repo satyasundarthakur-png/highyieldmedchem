@@ -363,3 +363,230 @@ export function InsulinGlucagonDiagram() {
   );
 }
 
+export function EnzymeKineticsDiagram() {
+  const vmax = 90, km = 140;
+  const curve = "M 40 170 C 90 60, 220 40, 420 38";
+  return (
+    <svg viewBox="0 0 460 200" className="w-full" role="img" aria-label="Michaelis-Menten enzyme kinetics diagram">
+      <ArrowDefs />
+      <line x1="40" y1="170" x2="440" y2="170" stroke="var(--color-muted-foreground)" strokeWidth={1.5} />
+      <line x1="40" y1="170" x2="40" y2="20" stroke="var(--color-muted-foreground)" strokeWidth={1.5} />
+      <text x="240" y="196" textAnchor="middle" fontSize="10" fill="var(--color-muted-foreground)">[Substrate] →</text>
+      <text x="16" y="95" textAnchor="middle" fontSize="10" fill="var(--color-muted-foreground)" transform="rotate(-90 16 95)">Velocity →</text>
+
+      <path d={curve} fill="none" stroke={violet.fg} strokeWidth={2.5} />
+      <line x1="40" y1={vmax} x2="440" y2={vmax} stroke={amber.fg} strokeOpacity={0.5} strokeDasharray="4 4" />
+      <text x="445" y={vmax + 4} fontSize="10" fontWeight={700} fill={amber.fg}>Vmax</text>
+      <line x1="40" y1={vmax + (170 - vmax) / 2} x2="150" y2={vmax + (170 - vmax) / 2} stroke={teal.fg} strokeOpacity={0.5} strokeDasharray="4 4" />
+      <line x1="150" y1={170} x2="150" y2={vmax + (170 - vmax) / 2} stroke={teal.fg} strokeOpacity={0.5} strokeDasharray="4 4" />
+      <text x="150" y="186" textAnchor="middle" fontSize="10" fontWeight={700} fill={teal.fg}>Km</text>
+      <text x="90" y={vmax + (170 - vmax) / 2 - 8} fontSize="9" fill={teal.fg}>½ Vmax</text>
+
+      <circle r="5" fill={violet.fg}>
+        <animateMotion dur="4s" repeatCount="indefinite" path={curve} />
+      </circle>
+      <text x="240" y="14" textAnchor="middle" fontSize="10.5" fill="var(--color-muted-foreground)">Km = substrate conc. at half-max velocity — low Km means high enzyme affinity</text>
+      <text x="240" y="150" textAnchor="middle" fontSize="9" fill="var(--color-muted-foreground)" opacity={0.001}>{km}</text>
+    </svg>
+  );
+}
+
+export function GlycogenMetabolismDiagram() {
+  return (
+    <svg viewBox="0 0 460 210" className="w-full" role="img" aria-label="Glycogenesis and glycogenolysis diagram">
+      <ArrowDefs />
+      <Step x={30} y={80} w={140} label="Glycogen" color={violet} />
+      <Step x={290} y={80} w={140} label="Glucose-1-P" color={teal} />
+
+      <path d="M 172 92 L 288 92" stroke={emerald.fg} strokeWidth={2} markerEnd="url(#arrowhead)" opacity={0.7} />
+      <text x="230" y="82" textAnchor="middle" fontSize="9.5" fontWeight={700} fill={emerald.fg}>Glycogen phosphorylase ★</text>
+      <text x="230" y="108" textAnchor="middle" fontSize="8.5" fill={emerald.fg}>(glycogenolysis — glucagon/epinephrine ↑)</text>
+
+      <path d="M 288 110 L 172 110" stroke={rose.fg} strokeWidth={2} markerEnd="url(#arrowhead)" opacity={0.7} />
+      <text x="230" y="132" textAnchor="middle" fontSize="9.5" fontWeight={700} fill={rose.fg}>Glycogen synthase ★</text>
+      <text x="230" y="148" textAnchor="middle" fontSize="8.5" fill={rose.fg}>(glycogenesis — insulin ↑)</text>
+
+      <rect x="30" y="20" width="400" height="38" rx="10" fill={amber.bg} opacity={0.5} />
+      <text x="230" y="43" textAnchor="middle" fontSize="10" fill={amber.fg}>Liver glycogen → maintains blood glucose. Muscle glycogen → used locally only (lacks glucose-6-phosphatase).</text>
+
+      <rect x="30" y="170" width="400" height="30" rx="8" fill={teal.bg} opacity={0.4} />
+      <text x="230" y="189" textAnchor="middle" fontSize="9.5" fill={teal.fg}>McArdle disease: muscle phosphorylase deficiency → exercise intolerance, no rise in lactate</text>
+
+      <circle r="4.5" fill={emerald.fg}>
+        <animateMotion dur="3.5s" repeatCount="indefinite" path="M 172 92 L 288 92" />
+      </circle>
+      <circle r="4.5" fill={rose.fg}>
+        <animateMotion dur="3.5s" begin="1.75s" repeatCount="indefinite" path="M 288 110 L 172 110" />
+      </circle>
+    </svg>
+  );
+}
+
+export function TransaminationDiagram() {
+  return (
+    <svg viewBox="0 0 460 180" className="w-full" role="img" aria-label="Transamination reaction diagram">
+      <ArrowDefs />
+      <Step x={20} y={30} w={150} label="Amino acid" color={teal} />
+      <Step x={20} y={110} w={150} label="α-Ketoglutarate" color={amber} />
+      <Step x={290} y={30} w={150} label="α-Keto acid" color={teal} />
+      <Step x={290} y={110} w={150} label="Glutamate" color={amber} />
+
+      <circle cx="230" cy="90" r="34" fill={violet.bg} stroke={violet.fg} strokeOpacity={0.4} />
+      <text x="230" y="86" textAnchor="middle" fontSize="10" fontWeight={700} fill={violet.fg}>ALT / AST</text>
+      <text x="230" y="99" textAnchor="middle" fontSize="8" fill={violet.fg}>needs PLP (B6)</text>
+
+      <Arrow x1={170} y1={50} x2={198} y2={78} />
+      <Arrow x1={198} y1={102} x2={170} y2={130} />
+      <Arrow x1={262} y1={78} x2={290} y2={50} />
+      <Arrow x1={290} y1={130} x2={262} y2={102} />
+
+      <circle r="4.5" fill={violet.fg}>
+        <animateMotion dur="5s" repeatCount="indefinite" path="M 170 50 L 230 90 L 290 50 M 290 130 L 230 90 L 170 130" />
+      </circle>
+      <text x="230" y="16" textAnchor="middle" fontSize="10.5" fill="var(--color-muted-foreground)">Transfers an amino group — funnels nitrogen from many amino acids into glutamate for the urea cycle</text>
+      <text x="230" y="168" textAnchor="middle" fontSize="9.5" fill="var(--color-muted-foreground)">High ALT/AST in serum = hepatocyte injury marker</text>
+    </svg>
+  );
+}
+
+export function PurineDegradationDiagram() {
+  const steps = ["Adenine / Guanine", "Hypoxanthine / Xanthine", "Xanthine", "Uric Acid"];
+  const colW = 130;
+  return (
+    <svg viewBox={`0 0 ${steps.length * colW + 20} 150`} className="w-full" role="img" aria-label="Purine degradation to uric acid diagram">
+      <ArrowDefs />
+      {steps.map((s, i) => {
+        const x = 10 + i * colW;
+        return (
+          <g key={s}>
+            <Step x={x} y={50} w={116} h={40} label={s} color={i === 3 ? rose : teal} />
+            {i < steps.length - 1 && <Arrow x1={x + 116} y1={70} x2={x + colW - 6} y2={70} />}
+          </g>
+        );
+      })}
+      <text x={(2 * colW) + 60} y="30" textAnchor="middle" fontSize="9.5" fontWeight={700} fill={amber.fg}>Xanthine oxidase ★</text>
+      <rect x="10" y="105" width={steps.length * colW - 10} height="34" rx="8" fill={amber.bg} opacity={0.5} />
+      <text x={(steps.length * colW) / 2} y="126" textAnchor="middle" fontSize="10" fill={amber.fg}>Allopurinol inhibits xanthine oxidase → treats gout &amp; tumor lysis syndrome</text>
+      <circle r="5" fill={rose.fg}>
+        <animateMotion dur="6s" repeatCount="indefinite" path={`M 68 70 ${steps.map((_, i) => `L ${10 + i * colW + 58} 70`).join(" ")}`} />
+      </circle>
+    </svg>
+  );
+}
+
+export function CholesterolSynthesisDiagram() {
+  const steps = ["Acetyl-CoA", "HMG-CoA", "Mevalonate", "Squalene", "Cholesterol"];
+  const colW = 100;
+  return (
+    <svg viewBox="0 0 520 120" className="w-full" role="img" aria-label="Cholesterol synthesis pathway diagram">
+      <ArrowDefs />
+      {steps.map((s, i) => {
+        const x = 10 + i * colW;
+        return (
+          <g key={s}>
+            <Step x={x} y={40} w={86} label={s} sub={i === 1 ? "HMG-CoA reductase ★" : ""} color={i === 1 ? amber : violet} />
+            {i < steps.length - 1 && <Arrow x1={x + 86} y1={60} x2={x + colW - 4} y2={60} />}
+          </g>
+        );
+      })}
+      <circle r="5" fill={violet.fg}>
+        <animateMotion dur="6s" repeatCount="indefinite" path={`M 53 60 ${steps.map((_, i) => `L ${10 + i * colW + 43} 60`).join(" ")}`} />
+      </circle>
+      <text x="260" y="20" textAnchor="middle" fontSize="10.5" fill="var(--color-muted-foreground)">Statins competitively inhibit HMG-CoA reductase, the rate-limiting step</text>
+      <text x="260" y="108" textAnchor="middle" fontSize="9.5" fill="var(--color-muted-foreground)">Synthesis occurs mainly in the liver; regulated by SREBP in response to cellular cholesterol</text>
+    </svg>
+  );
+}
+
+export function DigestionJourneyDiagram() {
+  const stops = [
+    { label: "Mouth", sub: "salivary amylase" },
+    { label: "Stomach", sub: "pepsin, HCl" },
+    { label: "Duodenum", sub: "bile + pancreatic enzymes" },
+    { label: "Jejunum/Ileum", sub: "brush-border digestion, absorption" },
+    { label: "Colon", sub: "water absorption, bacterial fermentation" },
+  ];
+  const colW = 100;
+  return (
+    <svg viewBox="0 0 520 130" className="w-full" role="img" aria-label="Digestive tract journey diagram">
+      <ArrowDefs />
+      {stops.map((s, i) => {
+        const x = 10 + i * colW;
+        const color = [teal, amber, violet, emerald, rose][i % 5]!;
+        return (
+          <g key={s.label}>
+            <Step x={x} y={40} w={86} h={44} label={s.label} sub={s.sub} color={color} />
+            {i < stops.length - 1 && <Arrow x1={x + 86} y1={62} x2={x + colW - 4} y2={62} />}
+          </g>
+        );
+      })}
+      <circle r="5" fill={amber.fg}>
+        <animateMotion dur="7s" repeatCount="indefinite" path={`M 53 62 ${stops.map((_, i) => `L ${10 + i * colW + 43} 62`).join(" ")}`} />
+      </circle>
+      <text x="260" y="20" textAnchor="middle" fontSize="10.5" fill="var(--color-muted-foreground)">One bolus, five stages — each releases a different set of enzymes</text>
+    </svg>
+  );
+}
+
+export function AcidBaseBufferDiagram() {
+  return (
+    <svg viewBox="0 0 460 190" className="w-full" role="img" aria-label="Bicarbonate buffer system diagram">
+      <ArrowDefs />
+      <Step x={20} y={70} w={110} label="CO₂ + H₂O" color={teal} />
+      <Step x={175} y={70} w={110} label="H₂CO₃" color={amber} />
+      <Step x={330} y={70} w={110} label="H⁺ + HCO₃⁻" color={rose} />
+      <path d="M 130 82 L 173 82" stroke={violet.fg} strokeWidth={2} markerEnd="url(#arrowhead)" />
+      <path d="M 173 98 L 130 98" stroke={violet.fg} strokeWidth={2} markerEnd="url(#arrowhead)" />
+      <text x="152" y="68" textAnchor="middle" fontSize="9" fill={violet.fg}>carbonic anhydrase</text>
+      <path d="M 285 82 L 328 82" stroke={violet.fg} strokeWidth={2} markerEnd="url(#arrowhead)" />
+      <path d="M 328 98 L 285 98" stroke={violet.fg} strokeWidth={2} markerEnd="url(#arrowhead)" />
+
+      <rect x="20" y="20" width="200" height="34" rx="8" fill={teal.bg} opacity={0.5} />
+      <text x="120" y="41" textAnchor="middle" fontSize="9.5" fill={teal.fg}>Lungs blow off CO₂ — fast, respiratory control</text>
+      <rect x="240" y="20" width="200" height="34" rx="8" fill={rose.bg} opacity={0.5} />
+      <text x="340" y="41" textAnchor="middle" fontSize="9.5" fill={rose.fg}>Kidneys excrete H⁺, reabsorb HCO₃⁻ — slow, metabolic control</text>
+
+      <rect x="20" y="140" width="420" height="34" rx="8" fill={amber.bg} opacity={0.5} />
+      <text x="230" y="161" textAnchor="middle" fontSize="10" fill={amber.fg}>Henderson-Hasselbalch: pH = 6.1 + log([HCO₃⁻] / 0.03 × pCO₂)</text>
+
+      <circle r="4.5" fill={violet.fg}>
+        <animateMotion dur="4s" repeatCount="indefinite" path="M 75 82 L 230 82 L 385 82 L 230 98 L 75 98" />
+      </circle>
+    </svg>
+  );
+}
+
+export function PcrCycleDiagram() {
+  const cx = 230, cy = 120, r = 78;
+  const phases = [
+    { label: "Denaturation", sub: "95 °C — strands separate", angle: -90 },
+    { label: "Annealing", sub: "~55 °C — primers bind", angle: 30 },
+    { label: "Extension", sub: "72 °C — Taq polymerase", angle: 150 },
+  ];
+  return (
+    <svg viewBox="0 0 460 260" className="w-full" role="img" aria-label="PCR thermal cycle diagram">
+      <ArrowDefs />
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke="var(--color-muted-foreground)" strokeOpacity={0.3} strokeWidth={1.5} />
+      {phases.map((p) => {
+        const rad = (p.angle * Math.PI) / 180;
+        const x = cx + r * Math.cos(rad);
+        const y = cy + r * Math.sin(rad);
+        const color = p.label === "Denaturation" ? rose : p.label === "Annealing" ? teal : amber;
+        return (
+          <g key={p.label}>
+            <circle cx={x} cy={y} r={44} fill={color.bg} stroke={color.fg} strokeOpacity={0.35} />
+            <text x={x} y={y - 4} textAnchor="middle" fontSize="10.5" fontWeight={700} fill={color.fg}>{p.label}</text>
+            <text x={x} y={y + 10} textAnchor="middle" fontSize="8" fill={color.fg}>{p.sub}</text>
+          </g>
+        );
+      })}
+      <circle r="5" fill={violet.fg}>
+        <animateMotion dur="4.5s" repeatCount="indefinite" path={`M ${cx + r} ${cy} A ${r} ${r} 0 1 1 ${cx + r - 0.01} ${cy}`} />
+      </circle>
+      <text x={cx} y="20" textAnchor="middle" fontSize="10.5" fill="var(--color-muted-foreground)">One cycle ≈ 2 minutes; 30+ cycles amplify target DNA exponentially (2ⁿ copies)</text>
+      <text x={cx} y="250" textAnchor="middle" fontSize="9.5" fill="var(--color-muted-foreground)">Taq polymerase is heat-stable — survives repeated 95 °C denaturation steps</text>
+    </svg>
+  );
+}
+
+

@@ -30,6 +30,14 @@ import {
   HemeSynthesisDiagram,
   DnaReplicationDiagram,
   InsulinGlucagonDiagram,
+  EnzymeKineticsDiagram,
+  GlycogenMetabolismDiagram,
+  TransaminationDiagram,
+  PurineDegradationDiagram,
+  CholesterolSynthesisDiagram,
+  DigestionJourneyDiagram,
+  AcidBaseBufferDiagram,
+  PcrCycleDiagram,
 } from "@/components/pathway-diagrams";
 
 type Tab = "sheets" | "flashcards" | "compounds" | "diagrams";
@@ -335,16 +343,24 @@ const GALLERY_ICONS = [
 ];
 
 const DIAGRAMS: { topicId: string; title: string; description: string; Component: () => ReactNode }[] = [
+  { topicId: "enzymes", title: "Enzyme Kinetics (Michaelis-Menten)", description: "How velocity rises with substrate concentration toward Vmax; Km marks half-max.", Component: EnzymeKineticsDiagram },
   { topicId: "glycolysis", title: "Glycolysis", description: "Glucose → pyruvate, 10 steps, cytosolic.", Component: GlycolysisDiagram },
   { topicId: "glycogen-hmp", title: "HMP Shunt (Pentose Phosphate Pathway)", description: "NADPH and ribose-5-phosphate production from glucose-6-phosphate.", Component: HmpShuntDiagram },
+  { topicId: "glycogen-hmp", title: "Glycogen Metabolism", description: "Glycogenesis vs glycogenolysis — opposite enzymes, opposite hormones.", Component: GlycogenMetabolismDiagram },
   { topicId: "tca-etc", title: "TCA (Krebs) Cycle", description: "Acetyl-CoA oxidation in the mitochondrial matrix — 8 intermediates per turn.", Component: TCACycleDiagram },
   { topicId: "tca-etc", title: "Electron Transport Chain", description: "Inner mitochondrial membrane — electron flow drives the proton gradient.", Component: ElectronTransportDiagram },
   { topicId: "lipid", title: "Beta-Oxidation", description: "Spiral shortening of a fatty acyl chain, 2 carbons at a time.", Component: BetaOxidationDiagram },
   { topicId: "lipid", title: "Lipoprotein Transport", description: "Chylomicrons, VLDL, LDL, HDL — who carries what, and to where.", Component: LipoproteinTransportDiagram },
+  { topicId: "lipid", title: "Cholesterol Synthesis", description: "Acetyl-CoA to cholesterol — where statins act.", Component: CholesterolSynthesisDiagram },
   { topicId: "amino-acid", title: "Urea Cycle", description: "Split across mitochondria and cytosol — ammonia disposal as urea.", Component: UreaCycleDiagram },
-  { topicId: "heme", title: "Heme Synthesis", description: "Alternates between mitochondria and cytosol; lead poisoning blocks two steps.", Component: HemeSynthesisDiagram },
+  { topicId: "amino-acid", title: "Transamination", description: "How amino groups move between amino acids and keto acids via ALT/AST.", Component: TransaminationDiagram },
+  { topicId: "nucleic-acid", title: "Purine Degradation", description: "Purines to uric acid — where allopurinol intervenes.", Component: PurineDegradationDiagram },
   { topicId: "molbio", title: "DNA Replication Fork", description: "Leading vs lagging strand synthesis at the replication fork.", Component: DnaReplicationDiagram },
+  { topicId: "biotech", title: "PCR Thermal Cycle", description: "Denaturation, annealing, extension — the 3-step loop that amplifies DNA.", Component: PcrCycleDiagram },
+  { topicId: "heme", title: "Heme Synthesis", description: "Alternates between mitochondria and cytosol; lead poisoning blocks two steps.", Component: HemeSynthesisDiagram },
+  { topicId: "water-electrolyte", title: "Bicarbonate Buffer System", description: "CO₂/HCO₃⁻ equilibrium — how lungs and kidneys defend blood pH.", Component: AcidBaseBufferDiagram },
   { topicId: "endocrine", title: "Insulin vs Glucagon", description: "The reciprocal hormone see-saw between the fed and fasting state.", Component: InsulinGlucagonDiagram },
+  { topicId: "digestion", title: "Digestive Tract Journey", description: "One bolus, five stages — what happens at each stop.", Component: DigestionJourneyDiagram },
 ];
 
 function DiagramCard({ title, description, color, onExpand, children }: { title: string; description: string; color: { bg: string; fg: string; ring: string }; onExpand: () => void; children: ReactNode }) {
