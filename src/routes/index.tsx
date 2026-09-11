@@ -31,6 +31,26 @@ interface Compound {
 
 const COMPOUNDS = compoundsData as Compound[];
 
+const TOPIC_PALETTE = [
+  { bg: "oklch(0.93 0.09 300)", fg: "oklch(0.36 0.17 300)", ring: "oklch(0.55 0.19 300)" },
+  { bg: "oklch(0.92 0.08 195)", fg: "oklch(0.34 0.09 210)", ring: "oklch(0.55 0.11 200)" },
+  { bg: "oklch(0.92 0.11 75)", fg: "oklch(0.36 0.1 60)", ring: "oklch(0.62 0.14 75)" },
+  { bg: "oklch(0.92 0.1 15)", fg: "oklch(0.4 0.16 15)", ring: "oklch(0.58 0.19 15)" },
+  { bg: "oklch(0.92 0.09 155)", fg: "oklch(0.35 0.1 155)", ring: "oklch(0.55 0.13 155)" },
+  { bg: "oklch(0.91 0.09 250)", fg: "oklch(0.36 0.12 255)", ring: "oklch(0.5 0.16 250)" },
+  { bg: "oklch(0.92 0.12 45)", fg: "oklch(0.4 0.13 45)", ring: "oklch(0.62 0.17 45)" },
+  { bg: "oklch(0.91 0.1 340)", fg: "oklch(0.38 0.16 340)", ring: "oklch(0.54 0.19 340)" },
+  { bg: "oklch(0.92 0.07 210)", fg: "oklch(0.35 0.09 220)", ring: "oklch(0.57 0.1 210)" },
+  { bg: "oklch(0.92 0.1 125)", fg: "oklch(0.37 0.11 130)", ring: "oklch(0.62 0.14 125)" },
+  { bg: "oklch(0.9 0.1 275)", fg: "oklch(0.34 0.14 278)", ring: "oklch(0.48 0.18 275)" },
+  { bg: "oklch(0.92 0.1 30)", fg: "oklch(0.4 0.14 30)", ring: "oklch(0.6 0.17 30)" },
+];
+
+function topicColor(topicId: string) {
+  const index = TOPICS.findIndex((topic) => topic.id === topicId);
+  return TOPIC_PALETTE[(index < 0 ? 0 : index) % TOPIC_PALETTE.length]!;
+}
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -58,10 +78,11 @@ function BiochemApp() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
+      <div className="h-1.5 w-full bg-[linear-gradient(90deg,oklch(0.55_0.19_300),oklch(0.6_0.14_195),oklch(0.75_0.16_80),oklch(0.62_0.21_15),oklch(0.6_0.16_155))]" />
       <header className="sticky top-0 z-20 border-b border-border bg-background/95 backdrop-blur">
         <div className="mx-auto flex w-full max-w-4xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-md bg-primary text-primary-foreground">
+            <div className="flex size-10 items-center justify-center rounded-xl text-primary-foreground shadow-sm bg-[linear-gradient(135deg,oklch(0.55_0.19_300),oklch(0.58_0.16_255))]">
               <FlaskConical aria-hidden="true" size={21} />
             </div>
             <div>
@@ -73,7 +94,7 @@ function BiochemApp() {
               </p>
             </div>
           </div>
-          <nav aria-label="Study modes" className="grid grid-cols-3 rounded-md bg-muted p-1">
+          <nav aria-label="Study modes" className="grid grid-cols-3 rounded-xl bg-muted p-1">
             <TabButton active={tab === "sheets"} onClick={() => setTab("sheets")} icon={<BookOpen size={16} />} label="Fact Sheets" />
             <TabButton active={tab === "flashcards"} onClick={() => setTab("flashcards")} icon={<Layers3 size={16} />} label="Flashcards" />
             <TabButton active={tab === "compounds"} onClick={() => setTab("compounds")} icon={<FlaskConical size={16} />} label="Compounds" />
@@ -96,7 +117,13 @@ function BiochemApp() {
 
 function TabButton({ active, onClick, icon, label }: { active: boolean; onClick: () => void; icon: ReactNode; label: string }) {
   return (
-    <Button variant="tab" active={active} onClick={onClick} aria-pressed={active} className="min-w-0 px-2 sm:px-3">
+    <Button
+      variant="tab"
+      active={active}
+      onClick={onClick}
+      aria-pressed={active}
+      className={`min-w-0 rounded-lg px-2 transition sm:px-3 ${active ? "text-primary shadow-sm" : ""}`}
+    >
       {icon}
       <span className="text-xs sm:text-sm">{label}</span>
     </Button>
@@ -123,11 +150,22 @@ function FactSheets() {
         <div className="grid gap-3 sm:grid-cols-2">
           {TOPICS.map((topic) => {
             const count = FACTS.filter((fact) => fact.topicId === topic.id).length;
+            const color = topicColor(topic.id);
             return (
-              <button key={topic.id} onClick={() => setTopicId(topic.id)} className="group min-h-36 rounded-md border border-border bg-card p-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              <button
+                key={topic.id}
+                onClick={() => setTopicId(topic.id)}
+                style={{ borderTopColor: color.ring }}
+                className="group min-h-36 rounded-xl border border-border border-t-4 bg-card p-5 text-left shadow-sm transition hover:-translate-y-1 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
                 <div className="flex items-start justify-between gap-4">
-                  <h3 className="font-display text-xl leading-tight text-card-foreground group-hover:text-primary">{topic.name}</h3>
-                  <span className="shrink-0 rounded-full bg-secondary px-2 py-1 text-[11px] font-bold text-secondary-foreground">{count} facts</span>
+                  <h3 className="font-display text-xl leading-tight text-card-foreground">{topic.name}</h3>
+                  <span
+                    style={{ backgroundColor: color.bg, color: color.fg }}
+                    className="shrink-0 rounded-full px-2 py-1 text-[11px] font-bold"
+                  >
+                    {count} facts
+                  </span>
                 </div>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{topic.blurb}</p>
               </button>
@@ -141,6 +179,7 @@ function FactSheets() {
   const topic = TOPICS.find((item) => item.id === topicId);
   if (!topic) return null;
   const facts = FACTS.filter((fact) => fact.topicId === topicId);
+  const color = topicColor(topicId);
 
   return (
     <section>
@@ -148,8 +187,13 @@ function FactSheets() {
       <SectionIntro eyebrow={`${facts.length} high-yield facts`} title={topic.name} description={topic.blurb} />
       <ol className="space-y-3">
         {facts.map((fact, index) => (
-          <li key={fact.id} className="flex gap-4 rounded-md border border-border bg-card p-4 shadow-sm sm:p-5">
-            <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-bold text-accent-foreground">{index + 1}</span>
+          <li key={fact.id} className="flex gap-4 rounded-xl border border-border bg-card p-4 shadow-sm sm:p-5">
+            <span
+              style={{ backgroundColor: color.bg, color: color.fg }}
+              className="flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-bold"
+            >
+              {index + 1}
+            </span>
             <p className="text-sm leading-7 text-card-foreground">{fact.fact}</p>
           </li>
         ))}
@@ -198,7 +242,7 @@ function Flashcards() {
       <SectionIntro eyebrow="Spaced repetition" title="Recall, then reveal" description="Review due cards and rate your recall. Your schedule is saved on this device." />
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <label className="sr-only" htmlFor="topic-filter">Filter flashcards by topic</label>
-        <select id="topic-filter" value={topicFilter} onChange={(event) => changeTopic(event.target.value)} className="min-h-10 rounded-md border border-input bg-card px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
+        <select id="topic-filter" value={topicFilter} onChange={(event) => changeTopic(event.target.value)} className="min-h-10 rounded-xl border border-input bg-card px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring">
           <option value="all">All topics ({FACTS.length})</option>
           {TOPICS.map((topic) => <option key={topic.id} value={topic.id}>{topic.name} ({FACTS.filter((fact) => fact.topicId === topic.id).length})</option>)}
         </select>
@@ -207,9 +251,19 @@ function Flashcards() {
 
       {current ? (
         <>
-          <button onClick={() => setFlipped((value) => !value)} className="flex min-h-72 w-full items-center justify-center rounded-md border border-border bg-card p-7 text-center shadow-sm transition hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:min-h-80 sm:p-12" aria-label={flipped ? "Show question" : "Reveal answer"}>
+          <button
+            onClick={() => setFlipped((value) => !value)}
+            style={{ borderTopColor: topicColor(current.topicId).ring }}
+            className="flex min-h-72 w-full items-center justify-center rounded-2xl border border-border border-t-4 bg-card p-7 text-center shadow-sm transition hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:min-h-80 sm:p-12"
+            aria-label={flipped ? "Show question" : "Reveal answer"}
+          >
             <div className="max-w-2xl">
-              <span className="mb-5 inline-block rounded-full bg-accent px-3 py-1 text-xs font-bold text-accent-foreground">{flipped ? "Answer" : "Question"}</span>
+              <span
+                style={{ backgroundColor: topicColor(current.topicId).bg, color: topicColor(current.topicId).fg }}
+                className="mb-5 inline-block rounded-full px-3 py-1 text-xs font-bold"
+              >
+                {flipped ? "Answer" : "Question"}
+              </span>
               <p className="font-display text-2xl leading-relaxed text-card-foreground sm:text-3xl">{flipped ? current.answer : current.question}</p>
             </div>
           </button>
@@ -229,7 +283,7 @@ function Flashcards() {
 }
 
 function GradeButton({ variant, label, sub, onClick }: { variant: "again" | "hard" | "good" | "easy"; label: string; sub: string; onClick: () => void }) {
-  return <Button variant={variant} onClick={onClick} className="h-16 flex-col gap-0"><span>{label}</span><span className="text-[10px] font-medium opacity-75">{sub}</span></Button>;
+  return <Button variant={variant} onClick={onClick} className="h-16 flex-col gap-0 rounded-xl"><span>{label}</span><span className="text-[10px] font-medium opacity-75">{sub}</span></Button>;
 }
 
 function CompoundLookup() {
@@ -246,19 +300,24 @@ function CompoundLookup() {
       <div className="relative mb-3">
         <Search aria-hidden="true" size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
         <label className="sr-only" htmlFor="compound-search">Search compounds</label>
-        <input id="compound-search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search pyruvate, NAD+, glucose…" className="min-h-12 w-full rounded-md border border-input bg-card pl-10 pr-4 text-sm text-foreground shadow-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring" />
+        <input id="compound-search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search pyruvate, NAD+, glucose…" className="min-h-12 w-full rounded-xl border border-input bg-card pl-10 pr-4 text-sm text-foreground shadow-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring" />
       </div>
       <p aria-live="polite" className="mb-4 text-xs font-medium text-muted-foreground">Showing {results.length} of {COMPOUNDS.length} compounds</p>
       <div className="grid gap-2 sm:grid-cols-2">
-        {results.map((compound) => (
-          <article key={compound.id} className="rounded-md border border-border bg-card p-4 shadow-sm">
-            <div className="flex items-start justify-between gap-4">
-              <h3 className="text-sm font-bold text-card-foreground">{compound.name}</h3>
-              {compound.mass !== "null" && <span className="shrink-0 text-xs text-muted-foreground">{compound.mass} g/mol</span>}
-            </div>
-            <p className="mt-2 break-all font-mono text-xs text-primary">{compound.formula || "Formula unavailable"}</p>
-          </article>
-        ))}
+        {results.map((compound, index) => {
+          const color = TOPIC_PALETTE[index % TOPIC_PALETTE.length]!;
+          return (
+            <article key={compound.id} className="rounded-xl border border-border bg-card p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+              <div className="flex items-start justify-between gap-4">
+                <h3 className="text-sm font-bold text-card-foreground">{compound.name}</h3>
+                {compound.mass !== "null" && <span className="shrink-0 text-xs text-muted-foreground">{compound.mass} g/mol</span>}
+              </div>
+              <p style={{ backgroundColor: color.bg, color: color.fg }} className="mt-2 inline-block break-all rounded-md px-2 py-0.5 font-mono text-xs">
+                {compound.formula || "Formula unavailable"}
+              </p>
+            </article>
+          );
+        })}
         {results.length === 0 && <p className="col-span-2 py-12 text-center text-sm text-muted-foreground">No compound matches “{query}”.</p>}
       </div>
       <p className="mt-5 text-xs leading-relaxed text-muted-foreground">Formulas and masses are from the ModelSEED biochemistry database (public domain).</p>
