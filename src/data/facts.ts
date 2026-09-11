@@ -14,31 +14,35 @@ export interface FactItem {
 }
 
 export const TOPICS: Topic[] = [
-  // Unit I — Protein Structure & Enzymes
-  { id: 'enzymes', unit: 'Unit I · Protein Structure & Enzymes', name: 'Enzymes & Kinetics', blurb: 'Michaelis-Menten, inhibition types, and diagnostic enzyme markers.' },
+  // Unit 1 — Enzymes & Biological Oxidation
+  { id: 'enzymes', unit: 'Unit 1 · Enzymes & Biological Oxidation', name: 'Enzymes', blurb: 'Michaelis-Menten, inhibition types, and diagnostic enzyme markers.' },
+  { id: 'tca-etc', unit: 'Unit 1 · Enzymes & Biological Oxidation', name: 'Biological Oxidation & TCA Cycle', blurb: 'The mitochondrial hub — electron transport chain, oxidative phosphorylation, and where acetyl-CoA is oxidized.' },
 
-  // Unit II — Bioenergetics & Carbohydrate Metabolism
-  { id: 'glycolysis', unit: 'Unit II · Bioenergetics & Carbohydrate Metabolism', name: 'Glycolysis & Gluconeogenesis', blurb: 'Glucose breakdown, the three irreversible steps, and how the liver runs it in reverse.' },
-  { id: 'tca-etc', unit: 'Unit II · Bioenergetics & Carbohydrate Metabolism', name: 'TCA Cycle & Electron Transport', blurb: 'The mitochondrial hub — where acetyl-CoA is oxidized and ATP is actually made.' },
-  { id: 'glycogen-hmp', unit: 'Unit II · Bioenergetics & Carbohydrate Metabolism', name: 'Glycogen Metabolism & HMP Shunt', blurb: 'Storage/mobilization of glucose, and the pathway that makes NADPH and ribose.' },
+  // Unit 2 — Carbohydrate Metabolism
+  { id: 'glycolysis', unit: 'Unit 2 · Carbohydrate Metabolism', name: 'Glycolysis & Gluconeogenesis', blurb: 'Glucose breakdown, the three irreversible steps, and how the liver runs it in reverse.' },
+  { id: 'glycogen-hmp', unit: 'Unit 2 · Carbohydrate Metabolism', name: 'Glycogen Metabolism & HMP Shunt', blurb: 'Storage/mobilization of glucose, and the pentose phosphate pathway that makes NADPH and ribose.' },
 
-  // Unit III — Lipid Metabolism
-  { id: 'lipid', unit: 'Unit III · Lipid Metabolism', name: 'Lipid Metabolism', blurb: 'Beta-oxidation, ketone bodies, cholesterol synthesis, and lipoprotein transport.' },
+  // Unit 3 — Lipid Metabolism
+  { id: 'lipid', unit: 'Unit 3 · Lipid Metabolism', name: 'Lipid Metabolism', blurb: 'Beta-oxidation, ketone bodies, cholesterol synthesis, and lipoprotein transport.' },
 
-  // Unit IV — Nitrogen Metabolism
-  { id: 'amino-acid', unit: 'Unit IV · Nitrogen Metabolism', name: 'Amino Acid Metabolism & Urea Cycle', blurb: 'Nitrogen disposal and the fates of individual amino acid carbon skeletons.' },
-  { id: 'heme', unit: 'Unit IV · Nitrogen Metabolism', name: 'Hemoglobin & Porphyrin Metabolism', blurb: 'Heme synthesis, porphyrias, bilirubin metabolism, and jaundice.' },
+  // Unit 4 — Protein & Amino Acid Metabolism
+  { id: 'amino-acid', unit: 'Unit 4 · Protein & Amino Acid Metabolism', name: 'Amino Acid Metabolism & Urea Cycle', blurb: 'Nitrogen disposal and the fates of individual amino acid carbon skeletons.' },
 
-  // Unit V — Integration & Endocrine Metabolism
-  { id: 'endocrine', unit: 'Unit V · Integration & Endocrine Metabolism', name: 'Endocrine Biochemistry', blurb: 'Hormone classes, receptor types, and second-messenger signaling.' },
-  { id: 'iem', unit: 'Unit V · Integration & Endocrine Metabolism', name: 'Inborn Errors of Metabolism', blurb: 'The enzyme deficiencies examiners love — one-liners linking defect to disease.' },
+  // Unit 5 — Nucleic Acids & Molecular Biology
+  { id: 'molbio', unit: 'Unit 5 · Nucleic Acids & Molecular Biology', name: 'Molecular Biology', blurb: 'DNA replication, transcription, translation, and repair — the biochemistry side of genetics.' },
 
-  // Unit VI — Molecular Biology & Human Genetics
-  { id: 'molbio', unit: 'Unit VI · Molecular Biology & Human Genetics', name: 'Molecular Biology Basics', blurb: 'DNA replication, transcription, translation, and repair — the biochemistry side of genetics.' },
+  // Unit 6 — Hemoglobin & Hemoprotein Metabolism
+  { id: 'heme', unit: 'Unit 6 · Hemoglobin & Hemoprotein Metabolism', name: 'Hemoglobin & Porphyrin Metabolism', blurb: 'Heme synthesis, porphyrias, bilirubin metabolism, and jaundice.' },
 
-  // Unit VII — Tissue & Special Biochemistry
-  { id: 'vitamins', unit: 'Unit VII · Tissue & Special Biochemistry', name: 'Vitamins & Coenzymes', blurb: 'Which vitamin is which coenzyme, and its classic deficiency syndrome.' },
-  { id: 'water-electrolyte', unit: 'Unit VII · Tissue & Special Biochemistry', name: 'Water, Electrolyte & Acid-Base Biochemistry', blurb: 'Buffer systems and the Henderson-Hasselbalch relationships examiners test.' },
+  // Unit 7 — Vitamins & Mineral Metabolism
+  { id: 'vitamins', unit: 'Unit 7 · Vitamins & Mineral Metabolism', name: 'Vitamins', blurb: 'Which vitamin is which coenzyme, and its classic deficiency syndrome.' },
+  { id: 'water-electrolyte', unit: 'Unit 7 · Vitamins & Mineral Metabolism', name: 'Water, Electrolyte & Acid-Base Balance', blurb: 'Buffer systems and the Henderson-Hasselbalch relationships examiners test.' },
+
+  // Unit 8 — Hormones
+  { id: 'endocrine', unit: 'Unit 8 · Hormones', name: 'Hormones', blurb: 'Hormone classes, receptor types, and second-messenger signaling.' },
+
+  // Unit 9 — Clinical & Applied Biochemistry
+  { id: 'iem', unit: 'Unit 9 · Clinical & Applied Biochemistry', name: 'Inborn Errors of Metabolism', blurb: 'The enzyme deficiencies examiners love — one-liners linking defect to disease.' },
 ];
 
 export const FACTS: FactItem[] = [

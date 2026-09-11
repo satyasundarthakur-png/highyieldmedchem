@@ -151,7 +151,7 @@ function FactSheets() {
     const units = Array.from(new Set(TOPICS.map((topic) => topic.unit)));
     return (
       <section>
-        <SectionIntro eyebrow={`${FACTS.length} essential facts`} title="Choose a pathway" description="Organized by unit, following Lippincott's Illustrated Reviews: Biochemistry — the sequence most Indian MBBS courses teach from." />
+        <SectionIntro eyebrow={`${FACTS.length} essential facts`} title="Choose a pathway" description="Organized by unit and chapter names as used in DM Vasudevan's Textbook of Biochemistry for Medical Students — the sequence most Indian MBBS students study from." />
         <div className="space-y-8">
           {units.map((unit) => (
             <div key={unit}>
