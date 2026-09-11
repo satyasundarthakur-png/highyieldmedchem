@@ -13,5 +13,7 @@ These illustrations are from [Bioicons](https://bioicons.com) ([github.com/duerr
 | liver-healthy.svg / liver-cirrhotic.svg | Jan Clusmann |
 | ribosome.svg | jaiganesh |
 | proteoglycan.svg | Daniel Marcos |
+| phospholipid.svg | Cléber Gomes |
+| antibody.svg | Derek Croote |
 
 All pathway/animation diagrams elsewhere in this app (Glycolysis, TCA cycle, Urea cycle, Electron Transport Chain) are original artwork created for this project, not sourced from any textbook.

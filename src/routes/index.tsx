@@ -24,6 +24,12 @@ import {
   TCACycleDiagram,
   UreaCycleDiagram,
   ElectronTransportDiagram,
+  HmpShuntDiagram,
+  BetaOxidationDiagram,
+  LipoproteinTransportDiagram,
+  HemeSynthesisDiagram,
+  DnaReplicationDiagram,
+  InsulinGlucagonDiagram,
 } from "@/components/pathway-diagrams";
 
 type Tab = "sheets" | "flashcards" | "compounds" | "diagrams";
@@ -314,21 +320,36 @@ function GradeButton({ variant, label, sub, onClick }: { variant: "again" | "har
 }
 
 const GALLERY_ICONS = [
-  { src: "/icons/mitochondria.svg", label: "Mitochondrion", caption: "Site of the TCA cycle and oxidative phosphorylation." },
-  { src: "/icons/dna-double-helix.svg", label: "DNA double helix", caption: "Antiparallel strands, A-T (2 H-bonds) and G-C (3 H-bonds) pairing." },
-  { src: "/icons/atp.svg", label: "ATP", caption: "Adenosine triphosphate — the cell's energy currency, three phosphoanhydride-linked phosphates." },
-  { src: "/icons/red-blood-cell.svg", label: "Red blood cell", caption: "No mitochondria — depends entirely on glycolysis and the HMP shunt." },
-  { src: "/icons/restriction-enzyme.svg", label: "Restriction enzyme", caption: "Cuts DNA at palindromic recognition sequences — the basis of recombinant DNA tools." },
-  { src: "/icons/ribosome.svg", label: "Ribosome", caption: "Large + small subunit; site of mRNA translation into protein." },
-  { src: "/icons/nephron.svg", label: "Nephron", caption: "Functional unit of the kidney — filtration, reabsorption, and acid-base regulation." },
-  { src: "/icons/liver-healthy.svg", label: "Healthy liver", caption: "Central hub of gluconeogenesis, urea synthesis, and detoxification." },
-  { src: "/icons/liver-cirrhotic.svg", label: "Cirrhotic liver", caption: "Fibrotic replacement of healthy tissue — impairs synthetic function (↓albumin, ↑PT)." },
-  { src: "/icons/proteoglycan.svg", label: "Proteoglycan", caption: "Core protein + GAG chains — gives cartilage its water-binding, compression resistance." },
+  { src: "/icons/mitochondria.svg", label: "Mitochondrion", caption: "Site of the TCA cycle and oxidative phosphorylation.", topicId: "tca-etc" },
+  { src: "/icons/dna-double-helix.svg", label: "DNA double helix", caption: "Antiparallel strands, A-T (2 H-bonds) and G-C (3 H-bonds) pairing.", topicId: "nucleic-acid" },
+  { src: "/icons/atp.svg", label: "ATP", caption: "Adenosine triphosphate — the cell's energy currency, three phosphoanhydride-linked phosphates.", topicId: "nucleic-acid" },
+  { src: "/icons/red-blood-cell.svg", label: "Red blood cell", caption: "No mitochondria — depends entirely on glycolysis and the HMP shunt.", topicId: "glycogen-hmp" },
+  { src: "/icons/restriction-enzyme.svg", label: "Restriction enzyme", caption: "Cuts DNA at palindromic recognition sequences — the basis of recombinant DNA tools.", topicId: "biotech" },
+  { src: "/icons/ribosome.svg", label: "Ribosome", caption: "Large + small subunit; site of mRNA translation into protein.", topicId: "molbio" },
+  { src: "/icons/nephron.svg", label: "Nephron", caption: "Functional unit of the kidney — filtration, reabsorption, and acid-base regulation.", topicId: "water-electrolyte" },
+  { src: "/icons/liver-healthy.svg", label: "Healthy liver", caption: "Central hub of gluconeogenesis, urea synthesis, and detoxification.", topicId: "organ-function" },
+  { src: "/icons/liver-cirrhotic.svg", label: "Cirrhotic liver", caption: "Fibrotic replacement of healthy tissue — impairs synthetic function (↓albumin, ↑PT).", topicId: "organ-function" },
+  { src: "/icons/proteoglycan.svg", label: "Proteoglycan", caption: "Core protein + GAG chains — gives cartilage its water-binding, compression resistance.", topicId: "ecm" },
+  { src: "/icons/phospholipid.svg", label: "Phospholipid", caption: "Amphipathic head/tail structure — the basic unit of every cell membrane.", topicId: "lipid" },
+  { src: "/icons/antibody.svg", label: "Antibody (VDJ recombination)", caption: "How heavy-chain gene segments recombine to generate antibody diversity.", topicId: "plasma-proteins" },
 ];
 
-function DiagramCard({ title, description, children }: { title: string; description: string; children: ReactNode }) {
+const DIAGRAMS: { topicId: string; title: string; description: string; Component: () => ReactNode }[] = [
+  { topicId: "glycolysis", title: "Glycolysis", description: "Glucose → pyruvate, 10 steps, cytosolic.", Component: GlycolysisDiagram },
+  { topicId: "glycogen-hmp", title: "HMP Shunt (Pentose Phosphate Pathway)", description: "NADPH and ribose-5-phosphate production from glucose-6-phosphate.", Component: HmpShuntDiagram },
+  { topicId: "tca-etc", title: "TCA (Krebs) Cycle", description: "Acetyl-CoA oxidation in the mitochondrial matrix — 8 intermediates per turn.", Component: TCACycleDiagram },
+  { topicId: "tca-etc", title: "Electron Transport Chain", description: "Inner mitochondrial membrane — electron flow drives the proton gradient.", Component: ElectronTransportDiagram },
+  { topicId: "lipid", title: "Beta-Oxidation", description: "Spiral shortening of a fatty acyl chain, 2 carbons at a time.", Component: BetaOxidationDiagram },
+  { topicId: "lipid", title: "Lipoprotein Transport", description: "Chylomicrons, VLDL, LDL, HDL — who carries what, and to where.", Component: LipoproteinTransportDiagram },
+  { topicId: "amino-acid", title: "Urea Cycle", description: "Split across mitochondria and cytosol — ammonia disposal as urea.", Component: UreaCycleDiagram },
+  { topicId: "heme", title: "Heme Synthesis", description: "Alternates between mitochondria and cytosol; lead poisoning blocks two steps.", Component: HemeSynthesisDiagram },
+  { topicId: "molbio", title: "DNA Replication Fork", description: "Leading vs lagging strand synthesis at the replication fork.", Component: DnaReplicationDiagram },
+  { topicId: "endocrine", title: "Insulin vs Glucagon", description: "The reciprocal hormone see-saw between the fed and fasting state.", Component: InsulinGlucagonDiagram },
+];
+
+function DiagramCard({ title, description, color, children }: { title: string; description: string; color: { bg: string; fg: string; ring: string }; children: ReactNode }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-4 shadow-sm sm:p-6">
+    <div style={{ borderTopColor: color.ring }} className="rounded-xl border border-border border-t-4 bg-card p-4 shadow-sm sm:p-6">
       <h3 className="font-display text-xl text-card-foreground">{title}</h3>
       <p className="mt-1 mb-4 text-sm text-muted-foreground">{description}</p>
       <div className="overflow-x-auto rounded-lg bg-muted/40 p-3">{children}</div>
@@ -337,43 +358,57 @@ function DiagramCard({ title, description, children }: { title: string; descript
 }
 
 function Diagrams() {
+  const units = Array.from(new Set(TOPICS.map((topic) => topic.unit)));
   return (
     <section>
       <SectionIntro
-        eyebrow="Animated pathway maps"
+        eyebrow={`${DIAGRAMS.length} animated pathway maps`}
         title="See the pathways move"
-        description="Original diagrams built for this app — flow direction, rate-limiting steps, and where each pathway happens. Plus a small reference gallery of structures and organelles."
+        description="Original diagrams built for this app — grouped by the same chapter units as the fact sheets, each with flow direction and rate-limiting steps animated."
       />
-      <div className="space-y-5">
-        <DiagramCard title="Glycolysis" description="Glucose → pyruvate, 10 steps, cytosolic.">
-          <GlycolysisDiagram />
-        </DiagramCard>
-        <DiagramCard title="TCA (Krebs) Cycle" description="Acetyl-CoA oxidation in the mitochondrial matrix — 8 intermediates per turn.">
-          <TCACycleDiagram />
-        </DiagramCard>
-        <DiagramCard title="Urea Cycle" description="Split across mitochondria and cytosol — ammonia disposal as urea.">
-          <UreaCycleDiagram />
-        </DiagramCard>
-        <DiagramCard title="Electron Transport Chain" description="Inner mitochondrial membrane — electron flow drives the proton gradient.">
-          <ElectronTransportDiagram />
-        </DiagramCard>
+      <div className="space-y-10">
+        {units.map((unit) => {
+          const unitTopicIds = new Set(TOPICS.filter((t) => t.unit === unit).map((t) => t.id));
+          const diagramsInUnit = DIAGRAMS.filter((d) => unitTopicIds.has(d.topicId));
+          const iconsInUnit = GALLERY_ICONS.filter((g) => unitTopicIds.has(g.topicId));
+          if (diagramsInUnit.length === 0 && iconsInUnit.length === 0) return null;
+          return (
+            <div key={unit}>
+              <h3 className="mb-3 text-xs font-bold uppercase tracking-wide text-muted-foreground">{unit}</h3>
+              {diagramsInUnit.length > 0 && (
+                <div className="grid gap-4 lg:grid-cols-2">
+                  {diagramsInUnit.map((d, i) => {
+                    const color = topicColor(d.topicId);
+                    const D = d.Component;
+                    return (
+                      <DiagramCard key={unit + d.title + i} title={d.title} description={d.description} color={color}>
+                        <D />
+                      </DiagramCard>
+                    );
+                  })}
+                </div>
+              )}
+              {iconsInUnit.length > 0 && (
+                <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+                  {iconsInUnit.map((icon) => {
+                    const color = topicColor(icon.topicId);
+                    return (
+                      <figure key={icon.src} style={{ borderTopColor: color.ring }} className="rounded-xl border border-border border-t-4 bg-card p-3 text-center shadow-sm">
+                        <img src={icon.src} alt={icon.label} className="mx-auto h-16 w-16 object-contain" loading="lazy" />
+                        <figcaption className="mt-2">
+                          <p className="text-xs font-bold text-card-foreground">{icon.label}</p>
+                          <p className="mt-1 text-[11px] leading-snug text-muted-foreground">{icon.caption}</p>
+                        </figcaption>
+                      </figure>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
-
-      <div className="mt-10 border-t border-border pt-6">
-        <h3 className="font-display text-2xl text-foreground">Structures &amp; organelles</h3>
-        <p className="mt-1 mb-4 text-sm text-muted-foreground">A quick-reference gallery, free to use (CC0, via Bioicons.com contributors).</p>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
-          {GALLERY_ICONS.map((icon) => (
-            <figure key={icon.src} className="rounded-xl border border-border bg-card p-3 text-center shadow-sm">
-              <img src={icon.src} alt={icon.label} className="mx-auto h-16 w-16 object-contain" loading="lazy" />
-              <figcaption className="mt-2">
-                <p className="text-xs font-bold text-card-foreground">{icon.label}</p>
-                <p className="mt-1 text-[11px] leading-snug text-muted-foreground">{icon.caption}</p>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      </div>
+      <p className="mt-8 text-xs leading-relaxed text-muted-foreground">Reference illustrations are free/public domain (CC0) via Bioicons.com contributors — see public/icons/CREDITS.md. Pathway diagrams are original artwork made for this app.</p>
     </section>
   );
 }
