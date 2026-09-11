@@ -6,6 +6,7 @@ import {
   FlaskConical,
   Layers3,
   Search,
+  Waypoints,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FACTS, TOPICS, type FactItem } from "@/data/facts";
@@ -18,8 +19,14 @@ import {
   saveSrsState,
   type Grade,
 } from "@/lib/srs";
+import {
+  GlycolysisDiagram,
+  TCACycleDiagram,
+  UreaCycleDiagram,
+  ElectronTransportDiagram,
+} from "@/components/pathway-diagrams";
 
-type Tab = "sheets" | "flashcards" | "compounds";
+type Tab = "sheets" | "flashcards" | "compounds" | "diagrams";
 
 interface Compound {
   id: string;
@@ -98,9 +105,10 @@ function BiochemApp() {
               </p>
             </div>
           </div>
-          <nav aria-label="Study modes" className="grid grid-cols-3 rounded-xl bg-muted p-1">
+          <nav aria-label="Study modes" className="grid grid-cols-4 rounded-xl bg-muted p-1">
             <TabButton active={tab === "sheets"} onClick={() => setTab("sheets")} icon={<BookOpen size={16} />} label="Fact Sheets" />
             <TabButton active={tab === "flashcards"} onClick={() => setTab("flashcards")} icon={<Layers3 size={16} />} label="Flashcards" />
+            <TabButton active={tab === "diagrams"} onClick={() => setTab("diagrams")} icon={<Waypoints size={16} />} label="Diagrams" />
             <TabButton active={tab === "compounds"} onClick={() => setTab("compounds")} icon={<FlaskConical size={16} />} label="Compounds" />
           </nav>
         </div>
@@ -109,6 +117,7 @@ function BiochemApp() {
       <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-7 sm:px-6 sm:py-10">
         {tab === "sheets" && <FactSheets />}
         {tab === "flashcards" && <Flashcards />}
+        {tab === "diagrams" && <Diagrams />}
         {tab === "compounds" && <CompoundLookup />}
       </main>
 
@@ -302,6 +311,71 @@ function Flashcards() {
 
 function GradeButton({ variant, label, sub, onClick }: { variant: "again" | "hard" | "good" | "easy"; label: string; sub: string; onClick: () => void }) {
   return <Button variant={variant} onClick={onClick} className="h-16 flex-col gap-0 rounded-xl"><span>{label}</span><span className="text-[10px] font-medium opacity-75">{sub}</span></Button>;
+}
+
+const GALLERY_ICONS = [
+  { src: "/icons/mitochondria.svg", label: "Mitochondrion", caption: "Site of the TCA cycle and oxidative phosphorylation." },
+  { src: "/icons/dna-double-helix.svg", label: "DNA double helix", caption: "Antiparallel strands, A-T (2 H-bonds) and G-C (3 H-bonds) pairing." },
+  { src: "/icons/atp.svg", label: "ATP", caption: "Adenosine triphosphate — the cell's energy currency, three phosphoanhydride-linked phosphates." },
+  { src: "/icons/red-blood-cell.svg", label: "Red blood cell", caption: "No mitochondria — depends entirely on glycolysis and the HMP shunt." },
+  { src: "/icons/restriction-enzyme.svg", label: "Restriction enzyme", caption: "Cuts DNA at palindromic recognition sequences — the basis of recombinant DNA tools." },
+  { src: "/icons/ribosome.svg", label: "Ribosome", caption: "Large + small subunit; site of mRNA translation into protein." },
+  { src: "/icons/nephron.svg", label: "Nephron", caption: "Functional unit of the kidney — filtration, reabsorption, and acid-base regulation." },
+  { src: "/icons/liver-healthy.svg", label: "Healthy liver", caption: "Central hub of gluconeogenesis, urea synthesis, and detoxification." },
+  { src: "/icons/liver-cirrhotic.svg", label: "Cirrhotic liver", caption: "Fibrotic replacement of healthy tissue — impairs synthetic function (↓albumin, ↑PT)." },
+  { src: "/icons/proteoglycan.svg", label: "Proteoglycan", caption: "Core protein + GAG chains — gives cartilage its water-binding, compression resistance." },
+];
+
+function DiagramCard({ title, description, children }: { title: string; description: string; children: ReactNode }) {
+  return (
+    <div className="rounded-xl border border-border bg-card p-4 shadow-sm sm:p-6">
+      <h3 className="font-display text-xl text-card-foreground">{title}</h3>
+      <p className="mt-1 mb-4 text-sm text-muted-foreground">{description}</p>
+      <div className="overflow-x-auto rounded-lg bg-muted/40 p-3">{children}</div>
+    </div>
+  );
+}
+
+function Diagrams() {
+  return (
+    <section>
+      <SectionIntro
+        eyebrow="Animated pathway maps"
+        title="See the pathways move"
+        description="Original diagrams built for this app — flow direction, rate-limiting steps, and where each pathway happens. Plus a small reference gallery of structures and organelles."
+      />
+      <div className="space-y-5">
+        <DiagramCard title="Glycolysis" description="Glucose → pyruvate, 10 steps, cytosolic.">
+          <GlycolysisDiagram />
+        </DiagramCard>
+        <DiagramCard title="TCA (Krebs) Cycle" description="Acetyl-CoA oxidation in the mitochondrial matrix — 8 intermediates per turn.">
+          <TCACycleDiagram />
+        </DiagramCard>
+        <DiagramCard title="Urea Cycle" description="Split across mitochondria and cytosol — ammonia disposal as urea.">
+          <UreaCycleDiagram />
+        </DiagramCard>
+        <DiagramCard title="Electron Transport Chain" description="Inner mitochondrial membrane — electron flow drives the proton gradient.">
+          <ElectronTransportDiagram />
+        </DiagramCard>
+      </div>
+
+      <div className="mt-10 border-t border-border pt-6">
+        <h3 className="font-display text-2xl text-foreground">Structures &amp; organelles</h3>
+        <p className="mt-1 mb-4 text-sm text-muted-foreground">A quick-reference gallery, free to use (CC0, via Bioicons.com contributors).</p>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
+          {GALLERY_ICONS.map((icon) => (
+            <figure key={icon.src} className="rounded-xl border border-border bg-card p-3 text-center shadow-sm">
+              <img src={icon.src} alt={icon.label} className="mx-auto h-16 w-16 object-contain" loading="lazy" />
+              <figcaption className="mt-2">
+                <p className="text-xs font-bold text-card-foreground">{icon.label}</p>
+                <p className="mt-1 text-[11px] leading-snug text-muted-foreground">{icon.caption}</p>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
 
 function CompoundLookup() {
