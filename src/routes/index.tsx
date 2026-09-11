@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import {
   ArrowLeft,
   BookOpen,
+  ClipboardList,
   ExternalLink,
   FlaskConical,
   Layers3,
@@ -42,7 +43,7 @@ import {
   PcrCycleDiagram,
 } from "@/components/pathway-diagrams";
 
-type Tab = "sheets" | "flashcards" | "compounds" | "diagrams";
+type Tab = "sheets" | "flashcards" | "compounds" | "diagrams" | "practical";
 
 interface Compound {
   id: string;
@@ -137,6 +138,7 @@ function LandingPage({ onEnter }: { onEnter: (tab: Tab) => void }) {
     { tab: "flashcards", title: "Flashcards", description: "Spaced-repetition review, sorted by topic and due date.", icon: <Layers3 size={22} />, color: TOPIC_PALETTE[2]! },
     { tab: "diagrams", title: "Diagrams", description: "Animated pathway maps you can tap to enlarge, grouped by chapter.", icon: <Waypoints size={22} />, color: TOPIC_PALETTE[4]! },
     { tab: "compounds", title: "Compounds", description: "Searchable metabolite library with clinical significance for each.", icon: <FlaskConical size={22} />, color: TOPIC_PALETTE[6]! },
+    { tab: "practical", title: "Practical & Viva", description: "Exam-station walkthroughs plus a searchable viva voce question bank.", icon: <ClipboardList size={22} />, color: TOPIC_PALETTE[9]! },
   ];
 
   return (
@@ -225,11 +227,12 @@ function BiochemApp() {
               </p>
             </div>
           </div>
-          <nav aria-label="Study modes" className="grid grid-cols-4 rounded-xl bg-muted p-1">
+          <nav aria-label="Study modes" className="grid grid-cols-5 rounded-xl bg-muted p-1">
             <TabButton active={tab === "sheets"} onClick={() => setTab("sheets")} icon={<BookOpen size={16} />} label="Fact Sheets" />
             <TabButton active={tab === "flashcards"} onClick={() => setTab("flashcards")} icon={<Layers3 size={16} />} label="Flashcards" />
             <TabButton active={tab === "diagrams"} onClick={() => setTab("diagrams")} icon={<Waypoints size={16} />} label="Diagrams" />
             <TabButton active={tab === "compounds"} onClick={() => setTab("compounds")} icon={<FlaskConical size={16} />} label="Compounds" />
+            <TabButton active={tab === "practical"} onClick={() => setTab("practical")} icon={<ClipboardList size={16} />} label="Practical" />
           </nav>
         </div>
       </header>
@@ -239,6 +242,7 @@ function BiochemApp() {
         {tab === "flashcards" && <Flashcards />}
         {tab === "diagrams" && <Diagrams />}
         {tab === "compounds" && <CompoundLookup />}
+        {tab === "practical" && <Practical />}
       </main>
 
       <footer className="border-t border-border px-4 py-6 text-center text-xs leading-relaxed text-muted-foreground">
@@ -258,7 +262,7 @@ function TabButton({ active, onClick, icon, label }: { active: boolean; onClick:
       className={`min-w-0 rounded-lg px-2 transition sm:px-3 ${active ? "text-primary shadow-sm" : ""}`}
     >
       {icon}
-      <span className="text-xs sm:text-sm">{label}</span>
+      <span className="hidden text-xs sm:inline sm:text-sm">{label}</span>
     </Button>
   );
 }
@@ -651,6 +655,148 @@ function Diagrams() {
           <ClinicalPearl text={openDiagram.pearl} color={topicColor(openDiagram.topicId)} />
         </Modal>
       )}
+    </section>
+  );
+}
+
+const PRACTICAL_STATIONS: { title: string; color: { bg: string; fg: string; ring: string }; steps: { title: string; description: string }[] }[] = [
+  {
+    title: "Qualitative Urine Analysis",
+    color: TOPIC_PALETTE[1]!,
+    steps: [
+      { title: "Physical examination", description: "Note color, transparency (clear/turbid), and odor of the sample before any reagent is added." },
+      { title: "Benedict's test — reducing sugars", description: "Boil 5 drops of urine with 2.5 mL Benedict's reagent. Green → yellow → orange → brick-red precipitate grades + to ++++, indicating glucosuria." },
+      { title: "Heat coagulation test — protein", description: "Heat the upper part of a urine column over a flame; a white turbidity that persists after adding 2–3 drops of acetic acid confirms proteinuria." },
+      { title: "Rothera's test — ketone bodies", description: "Saturate urine with ammonium sulfate, add sodium nitroprusside and ammonia. A purple/pink ring at the interface indicates ketonuria." },
+      { title: "Hay's test — bile salts", description: "Sprinkle sulfur powder on the urine surface. Sinking of the powder (reduced surface tension) indicates bile salts are present." },
+      { title: "Fouchet's test — bile pigments", description: "A blue-green color after adding Fouchet's reagent to a barium-chloride precipitate of the urine confirms bilirubin." },
+    ],
+  },
+  {
+    title: "Blood Sugar Estimation (GOD-POD)",
+    color: TOPIC_PALETTE[3]!,
+    steps: [
+      { title: "Sample collection", description: "Collect fasting or postprandial venous blood; separate plasma/serum promptly to prevent glycolysis from lowering the reading." },
+      { title: "Enzymatic reaction", description: "Glucose oxidase converts glucose to gluconic acid + H₂O₂; peroxidase then couples the H₂O₂ with a chromogen to form a colored product." },
+      { title: "Colorimetry", description: "Read absorbance at 505 nm against a reagent blank and a known glucose standard, using a photoelectric colorimeter." },
+      { title: "Calculation", description: "Glucose (mg/dL) = (Absorbance of test ÷ Absorbance of standard) × concentration of the standard." },
+      { title: "Interpretation", description: "Compare against reference ranges — fasting 70–100 mg/dL — and flag values meeting prediabetes/diabetes cutoffs (ADA/WHO criteria)." },
+    ],
+  },
+  {
+    title: "Biochemistry Spotters & Instruments",
+    color: TOPIC_PALETTE[5]!,
+    steps: [
+      { title: "Colorimeter", description: "Measures absorbance of a colored solution using filters (not a prism, unlike a spectrophotometer) — identify by its filter wheel and cuvette holder." },
+      { title: "Centrifuge", description: "Separates serum/plasma from blood cells by density under centrifugal force — look for the rotor and sample tube slots." },
+      { title: "pH meter", description: "Uses a glass electrode sensitive to H⁺ activity to measure pH — identify by the glass/reference electrode probe." },
+      { title: "Semi-autoanalyzer", description: "Automates reagent-sample mixing and photometric reading for biochemistry panels — a common spotter in practical exams." },
+      { title: "Chromatography paper / TLC plate", description: "Separates compounds by differential migration through a stationary phase — identify by spots/bands and an Rf value calculation." },
+      { title: "Glucometer", description: "Point-of-care device using a glucose oxidase strip and amperometric or colorimetric detection for rapid bedside glucose testing." },
+    ],
+  },
+  {
+    title: "Clinical Case / Report Discussion",
+    color: TOPIC_PALETTE[7]!,
+    steps: [
+      { title: "Identify the abnormal parameter(s)", description: "Scan the report systematically (e.g. LFT, RFT, lipid profile) and note every value outside the reference range before jumping to a diagnosis." },
+      { title: "Correlate the pattern", description: "Group abnormalities into a recognizable pattern — e.g. cholestatic vs hepatocellular liver injury, or a specific dyslipidemia phenotype." },
+      { title: "Bring in the clinical vignette", description: "Match the biochemical pattern against the patient's presenting symptoms, history, and risk factors given in the case." },
+      { title: "State the most likely diagnosis", description: "Commit to a single best-fit diagnosis and name one confirmatory test the examiner would expect next." },
+      { title: "Mention a differential", description: "Name one alternative diagnosis that could produce a similar pattern, and the key feature that distinguishes it." },
+    ],
+  },
+];
+
+function PracticalStationCard({ station }: { station: (typeof PRACTICAL_STATIONS)[number] }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ borderTopColor: station.color.ring }} className="rounded-xl border border-border border-t-4 bg-card p-4 shadow-sm sm:p-5">
+      <button type="button" onClick={() => setOpen((v) => !v)} className="flex w-full items-center justify-between gap-3 text-left">
+        <h3 className="font-display text-xl text-card-foreground">{station.title}</h3>
+        <span style={{ backgroundColor: station.color.bg, color: station.color.fg }} className="shrink-0 rounded-full px-2 py-1 text-[11px] font-bold">
+          {station.steps.length} steps
+        </span>
+      </button>
+      {open && (
+        <ol className="mt-4 space-y-3">
+          {station.steps.map((step, i) => (
+            <li key={step.title} className="flex gap-3">
+              <span style={{ backgroundColor: station.color.bg, color: station.color.fg }} className="flex size-6 shrink-0 items-center justify-center rounded-full text-[11px] font-bold">
+                {i + 1}
+              </span>
+              <div>
+                <p className="text-sm font-bold text-card-foreground">{step.title}</p>
+                <p className="mt-0.5 text-sm leading-relaxed text-muted-foreground">{step.description}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      )}
+    </div>
+  );
+}
+
+function VivaBank() {
+  const [query, setQuery] = useState("");
+  const units = Array.from(new Set(TOPICS.map((t) => t.unit)));
+  const normalized = query.trim().toLowerCase();
+  return (
+    <div>
+      <div className="relative mb-4">
+        <Search aria-hidden="true" size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+        <label className="sr-only" htmlFor="viva-search">Search viva questions</label>
+        <input id="viva-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search a viva question…" className="min-h-12 w-full rounded-xl border border-input bg-card pl-10 pr-4 text-sm text-foreground shadow-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring" />
+      </div>
+      <div className="space-y-8">
+        {units.map((unit) => {
+          const unitTopicIds = new Set(TOPICS.filter((t) => t.unit === unit).map((t) => t.id));
+          const questions = FACTS.filter((f) => unitTopicIds.has(f.topicId) && (normalized === "" || f.question.toLowerCase().includes(normalized) || f.answer.toLowerCase().includes(normalized)));
+          if (questions.length === 0) return null;
+          return (
+            <div key={unit}>
+              <h3 className="mb-3 text-xs font-bold uppercase tracking-wide text-muted-foreground">{unit}</h3>
+              <div className="space-y-2">
+                {questions.map((f) => {
+                  const color = topicColor(f.topicId);
+                  return (
+                    <details key={f.id} className="group rounded-lg border border-border bg-card p-3 open:shadow-sm">
+                      <summary className="flex cursor-pointer list-none items-start justify-between gap-3 text-sm font-bold text-card-foreground marker:content-none">
+                        <span>{f.question}</span>
+                        <span style={{ backgroundColor: color.bg, color: color.fg }} className="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold group-open:hidden">Reveal</span>
+                      </summary>
+                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.answer}</p>
+                    </details>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function Practical() {
+  return (
+    <section>
+      <SectionIntro
+        eyebrow="Practical exam + viva voce"
+        title="Get ready for the bench and the table"
+        description="The recent Indian MBBS biochemistry practical format: qualitative tests, an estimation exercise, spotters/instruments, a case discussion — plus a searchable viva voce question bank pulled from every chapter."
+      />
+      <div className="space-y-4">
+        {PRACTICAL_STATIONS.map((station) => (
+          <PracticalStationCard key={station.title} station={station} />
+        ))}
+      </div>
+
+      <div className="mt-10 border-t border-border pt-6">
+        <h3 className="font-display text-2xl text-foreground">Viva Voce Question Bank</h3>
+        <p className="mt-1 mb-4 text-sm text-muted-foreground">Tap any question to reveal the answer — the same high-yield Q&amp;A used in Flashcards, organized for rapid-fire viva practice.</p>
+        <VivaBank />
+      </div>
     </section>
   );
 }
