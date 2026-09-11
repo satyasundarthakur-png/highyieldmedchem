@@ -125,8 +125,87 @@ export const Route = createFileRoute("/")({
   component: BiochemApp,
 });
 
+function LandingPage({ onEnter }: { onEnter: (tab: Tab) => void }) {
+  const stats = [
+    { label: "Chapters", value: "22" },
+    { label: "High-yield facts", value: `${FACTS.length}+` },
+    { label: "Animated diagrams", value: "18" },
+    { label: "Compounds", value: "99" },
+  ];
+  const features: { tab: Tab; title: string; description: string; icon: ReactNode; color: { bg: string; fg: string; ring: string } }[] = [
+    { tab: "sheets", title: "Fact Sheets", description: "Concise, chapter-by-chapter facts with clinical pearls and further reading.", icon: <BookOpen size={22} />, color: TOPIC_PALETTE[0]! },
+    { tab: "flashcards", title: "Flashcards", description: "Spaced-repetition review, sorted by topic and due date.", icon: <Layers3 size={22} />, color: TOPIC_PALETTE[2]! },
+    { tab: "diagrams", title: "Diagrams", description: "Animated pathway maps you can tap to enlarge, grouped by chapter.", icon: <Waypoints size={22} />, color: TOPIC_PALETTE[4]! },
+    { tab: "compounds", title: "Compounds", description: "Searchable metabolite library with clinical significance for each.", icon: <FlaskConical size={22} />, color: TOPIC_PALETTE[6]! },
+  ];
+
+  return (
+    <div className="flex min-h-screen flex-col bg-background">
+      <div className="h-1.5 w-full bg-[linear-gradient(90deg,oklch(0.55_0.19_300),oklch(0.6_0.14_195),oklch(0.75_0.16_80),oklch(0.62_0.21_15),oklch(0.6_0.16_155))]" />
+
+      <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col px-4 py-10 sm:px-6 sm:py-16">
+        <div className="relative overflow-hidden rounded-3xl bg-[linear-gradient(135deg,oklch(0.94_0.08_300),oklch(0.93_0.07_195)_45%,oklch(0.94_0.1_75))] p-6 text-center shadow-sm sm:p-12">
+          <div className="pointer-events-none absolute -right-10 -top-10 size-40 rounded-full bg-white/30 blur-2xl" />
+          <div className="pointer-events-none absolute -bottom-14 -left-10 size-48 rounded-full bg-white/30 blur-2xl" />
+
+          <div className="relative mx-auto flex size-16 items-center justify-center rounded-2xl text-primary-foreground shadow-md bg-[linear-gradient(135deg,oklch(0.55_0.19_300),oklch(0.58_0.16_255))] sm:size-20">
+            <FlaskConical aria-hidden="true" size={34} />
+          </div>
+          <h1 className="relative mt-5 font-display text-4xl leading-tight text-foreground sm:text-5xl">
+            Biochem High-Yield
+          </h1>
+          <p className="relative mx-auto mt-3 max-w-lg text-sm leading-relaxed text-muted-foreground sm:text-base">
+            Fact sheets, flashcards, animated pathway diagrams, and a compound reference — chaptered the way Indian MBBS students actually study, with clinical pearls throughout.
+          </p>
+
+          <div className="relative mt-7 flex flex-wrap justify-center gap-2 sm:gap-3">
+            {stats.map((s) => (
+              <div key={s.label} className="rounded-xl bg-white/70 px-4 py-2 text-center shadow-sm backdrop-blur">
+                <p className="font-display text-xl text-foreground sm:text-2xl">{s.value}</p>
+                <p className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">{s.label}</p>
+              </div>
+            ))}
+          </div>
+
+          <Button onClick={() => onEnter("sheets")} className="relative mt-8 h-12 rounded-xl px-8 text-base shadow-md">
+            Start Studying
+          </Button>
+        </div>
+
+        <div className="mt-8 grid gap-3 sm:mt-10 sm:grid-cols-2">
+          {features.map((f) => (
+            <button
+              key={f.tab}
+              type="button"
+              onClick={() => onEnter(f.tab)}
+              style={{ borderTopColor: f.color.ring }}
+              className="group rounded-xl border border-border border-t-4 bg-card p-5 text-left shadow-sm transition hover:-translate-y-1 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <div style={{ backgroundColor: f.color.bg, color: f.color.fg }} className="flex size-11 items-center justify-center rounded-xl">
+                {f.icon}
+              </div>
+              <h3 className="mt-3 font-display text-xl text-card-foreground">{f.title}</h3>
+              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{f.description}</p>
+              <span className="mt-3 inline-block text-xs font-bold" style={{ color: f.color.fg }}>Explore →</span>
+            </button>
+          ))}
+        </div>
+      </main>
+
+      <footer className="border-t border-border px-4 py-6 text-center text-xs leading-relaxed text-muted-foreground">
+        High-yield facts are original summaries for exam revision. Always cross-check your course material.
+      </footer>
+    </div>
+  );
+}
+
 function BiochemApp() {
   const [tab, setTab] = useState<Tab>("sheets");
+  const [entered, setEntered] = useState(false);
+
+  if (!entered) {
+    return <LandingPage onEnter={(t) => { setTab(t); setEntered(true); }} />;
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -134,9 +213,9 @@ function BiochemApp() {
       <header className="sticky top-0 z-20 border-b border-border bg-background/95 backdrop-blur">
         <div className="mx-auto flex w-full max-w-4xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-xl text-primary-foreground shadow-sm bg-[linear-gradient(135deg,oklch(0.55_0.19_300),oklch(0.58_0.16_255))]">
+            <button type="button" onClick={() => setEntered(false)} className="flex size-10 items-center justify-center rounded-xl text-primary-foreground shadow-sm bg-[linear-gradient(135deg,oklch(0.55_0.19_300),oklch(0.58_0.16_255))]" aria-label="Back to home">
               <FlaskConical aria-hidden="true" size={21} />
-            </div>
+            </button>
             <div>
               <h1 className="font-display text-2xl leading-none text-foreground">
                 Biochem High-Yield
