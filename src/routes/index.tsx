@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { FACTS, TOPICS, type FactItem } from "@/data/facts";
 import compoundsData from "@/data/compounds.json";
+import { COMPOUND_NOTES } from "@/data/compound-notes";
 import {
   getOrInitCard,
   isDue,
@@ -577,6 +578,7 @@ function Diagrams() {
 
 function CompoundLookup() {
   const [query, setQuery] = useState("");
+  const [openCompound, setOpenCompound] = useState<Compound | null>(null);
   const results = useMemo(() => {
     const normalized = query.trim().toLowerCase();
     if (!normalized) return COMPOUNDS;
@@ -585,7 +587,7 @@ function CompoundLookup() {
 
   return (
     <section>
-      <SectionIntro eyebrow={`${COMPOUNDS.length} curated metabolites`} title="Compound reference" description="Search by metabolite name or molecular formula for a quick biochemical reference." />
+      <SectionIntro eyebrow={`${COMPOUNDS.length} curated metabolites`} title="Compound reference" description="Search by metabolite name or molecular formula. Tap any card for its clinical significance." />
       <div className="relative mb-3">
         <Search aria-hidden="true" size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
         <label className="sr-only" htmlFor="compound-search">Search compounds</label>
@@ -595,8 +597,15 @@ function CompoundLookup() {
       <div className="grid gap-2 sm:grid-cols-2">
         {results.map((compound, index) => {
           const color = TOPIC_PALETTE[index % TOPIC_PALETTE.length]!;
+          const note = COMPOUND_NOTES[compound.id];
           return (
-            <article key={compound.id} className="rounded-xl border border-border bg-card p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+            <button
+              key={compound.id}
+              type="button"
+              onClick={() => setOpenCompound(compound)}
+              style={{ borderTopColor: color.ring }}
+              className="group rounded-xl border border-border border-t-4 bg-card p-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.98]"
+            >
               <div className="flex items-start justify-between gap-4">
                 <h3 className="text-sm font-bold text-card-foreground">{compound.name}</h3>
                 {compound.mass !== "null" && <span className="shrink-0 text-xs text-muted-foreground">{compound.mass} g/mol</span>}
@@ -604,12 +613,33 @@ function CompoundLookup() {
               <p style={{ backgroundColor: color.bg, color: color.fg }} className="mt-2 inline-block break-all rounded-md px-2 py-0.5 font-mono text-xs">
                 {compound.formula || "Formula unavailable"}
               </p>
-            </article>
+              {note && <p className="mt-2 line-clamp-2 text-xs leading-snug text-muted-foreground">{note}</p>}
+              <span className="mt-2 inline-block text-[10px] font-bold uppercase tracking-wide opacity-0 transition group-hover:opacity-100" style={{ color: color.fg }}>Tap for details →</span>
+            </button>
           );
         })}
-        {results.length === 0 && <p className="col-span-2 py-12 text-center text-sm text-muted-foreground">No compound matches “{query}”.</p>}
+        {results.length === 0 && <p className="col-span-2 py-12 text-center text-sm text-muted-foreground">No compound matches "{query}".</p>}
       </div>
-      <p className="mt-5 text-xs leading-relaxed text-muted-foreground">Formulas and masses are from the ModelSEED biochemistry database (public domain).</p>
+      <p className="mt-5 text-xs leading-relaxed text-muted-foreground">Formulas and masses are from the ModelSEED biochemistry database (public domain). Clinical/biological significance notes are original summaries written for this app.</p>
+
+      {openCompound && (
+        <Modal title={openCompound.name} color={TOPIC_PALETTE[COMPOUNDS.indexOf(openCompound) % TOPIC_PALETTE.length]!} onClose={() => setOpenCompound(null)}>
+          <p className="text-left font-display text-2xl text-card-foreground">{openCompound.name}</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <span className="rounded-md bg-muted px-2 py-1 font-mono text-xs text-foreground">{openCompound.formula || "Formula unavailable"}</span>
+            {openCompound.mass !== "null" && <span className="rounded-md bg-muted px-2 py-1 text-xs text-foreground">{openCompound.mass} g/mol</span>}
+          </div>
+          {COMPOUND_NOTES[openCompound.id] ? (
+            <div className="mt-4 text-left">
+              <p className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">Clinical / biological significance</p>
+              <p className="mt-1 text-sm leading-relaxed text-card-foreground">{COMPOUND_NOTES[openCompound.id]}</p>
+            </div>
+          ) : (
+            <p className="mt-4 text-sm text-muted-foreground">No significance note yet for this compound.</p>
+          )}
+          <FurtherReading topicName={openCompound.name} color={TOPIC_PALETTE[COMPOUNDS.indexOf(openCompound) % TOPIC_PALETTE.length]!} />
+        </Modal>
+      )}
     </section>
   );
 }
