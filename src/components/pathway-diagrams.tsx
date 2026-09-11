@@ -590,3 +590,324 @@ export function PcrCycleDiagram() {
 }
 
 
+export function FattyAcidSynthesisDiagram() {
+  const steps = ["Acetyl-CoA", "Malonyl-CoA", "→ 7 cycles →", "Palmitate (C16)"];
+  const colW = 130;
+  return (
+    <svg viewBox="0 0 540 120" className="w-full" role="img" aria-label="Fatty acid synthesis diagram">
+      <ArrowDefs />
+      {steps.map((s, i) => {
+        const x = 10 + i * colW;
+        return (
+          <g key={s}>
+            <Step x={x} y={40} w={112} h={40} label={s} sub={i === 1 ? "Acetyl-CoA carboxylase ★" : ""} color={i === 1 ? amber : emerald} />
+            {i < steps.length - 1 && <Arrow x1={x + 112} y1={60} x2={x + colW - 6} y2={60} />}
+          </g>
+        );
+      })}
+      <circle r="5" fill={emerald.fg}>
+        <animateMotion dur="6s" repeatCount="indefinite" path={`M 66 60 ${steps.map((_, i) => `L ${10 + i * colW + 56} 60`).join(" ")}`} />
+      </circle>
+      <text x="270" y="20" textAnchor="middle" fontSize="10.5" fill="var(--color-muted-foreground)">Cytosolic pathway; fatty acid synthase uses NADPH (from HMP shunt). ACC is the rate-limiting, biotin-dependent step.</text>
+      <text x="270" y="105" textAnchor="middle" fontSize="9.5" fill="var(--color-muted-foreground)">Citrate carries acetyl groups out of mitochondria — links TCA cycle to fatty acid synthesis</text>
+    </svg>
+  );
+}
+
+export function KetogenesisDiagram() {
+  return (
+    <svg viewBox="0 0 460 190" className="w-full" role="img" aria-label="Ketogenesis diagram">
+      <ArrowDefs />
+      <Step x={20} y={20} w={160} label="2 × Acetyl-CoA" color={teal} />
+      <Arrow x1={100} y1={60} x2={100} y2={80} />
+      <Step x={20} y={85} w={160} label="Acetoacetyl-CoA" color={teal} />
+      <Arrow x1={100} y1={125} x2={100} y2={145} />
+      <Step x={20} y={150} w={160} label="HMG-CoA" sub="(liver mitochondria only)" color={amber} />
+
+      <Arrow x1={185} y1={170} x2={230} y2={170} />
+      <Step x={240} y={150} w={200} label="Acetoacetate" color={rose} />
+      <Arrow x1={340} y1={150} x2={340} y2={120} />
+      <Step x={240} y={70} w={95} label="Acetone" sub="(breath odor)" color={magenta} />
+      <Step x={345} y={70} w={95} label="β-OH-butyrate" color={magenta} />
+      <Arrow x1={300} y1={148} x2={280} y2={112} />
+      <Arrow x1={370} y1={148} x2={385} y2={112} />
+
+      <circle r="4.5" fill={amber.fg}>
+        <animateMotion dur="6s" repeatCount="indefinite" path="M 100 40 L 100 105 L 100 170 L 340 170 L 340 90" />
+      </circle>
+      <text x="230" y="14" textAnchor="middle" fontSize="10" fill="var(--color-muted-foreground)">Made only in liver mitochondria — the liver cannot use ketones itself (lacks thiophorase/CoA transferase)</text>
+    </svg>
+  );
+}
+
+export function OneCarbonFolateDiagram() {
+  return (
+    <svg viewBox="0 0 460 190" className="w-full" role="img" aria-label="One-carbon folate cycle diagram">
+      <ArrowDefs />
+      <Step x={20} y={70} w={150} label="Homocysteine" color={rose} />
+      <Step x={290} y={70} w={150} label="Methionine" color={emerald} />
+      <circle cx="230" cy="90" r="34" fill={violet.bg} stroke={violet.fg} strokeOpacity={0.4} />
+      <text x="230" y="86" textAnchor="middle" fontSize="9.5" fontWeight={700} fill={violet.fg}>Methionine</text>
+      <text x="230" y="98" textAnchor="middle" fontSize="9.5" fontWeight={700} fill={violet.fg}>synthase</text>
+      <text x="230" y="45" textAnchor="middle" fontSize="9" fill={violet.fg}>needs B12 + N5-methyl-THF (folate)</text>
+      <Arrow x1={170} y1={90} x2={196} y2={90} />
+      <Arrow x1={264} y1={90} x2={290} y2={90} />
+
+      <rect x="20" y="130" width="420" height="42" rx="10" fill={amber.bg} opacity={0.5} />
+      <text x="230" y="150" textAnchor="middle" fontSize="10" fill={amber.fg}>B12 or folate deficiency → ↑homocysteine, megaloblastic anemia. Methionine → SAM, the universal methyl donor.</text>
+
+      <circle r="4.5" fill={violet.fg}>
+        <animateMotion dur="4s" repeatCount="indefinite" path="M 95 90 L 290 90" />
+      </circle>
+    </svg>
+  );
+}
+
+export function AdrenalSteroidogenesisDiagram() {
+  const branches = [
+    { label: "Cortisol", sub: "zona fasciculata", color: amber },
+    { label: "Aldosterone", sub: "zona glomerulosa", color: teal },
+    { label: "Androgens", sub: "zona reticularis", color: magenta },
+  ];
+  return (
+    <svg viewBox="0 0 460 200" className="w-full" role="img" aria-label="Adrenal steroidogenesis diagram">
+      <ArrowDefs />
+      <Step x={20} y={20} w={150} label="Cholesterol" color={violet} />
+      <Arrow x1={95} y1={60} x2={95} y2={80} />
+      <Step x={20} y={85} w={150} label="Pregnenolone" color={violet} />
+      <Arrow x1={170} y1={105} x2={200} y2={105} />
+      <text x="185" y="98" fontSize="8.5" fill={violet.fg}>StAR ★</text>
+
+      {branches.map((b, i) => {
+        const x = 210 + i * 85;
+        return (
+          <g key={b.label}>
+            <Arrow x1={95} y1={125} x2={x + 35} y2={160} />
+            <circle cx={x + 35} cy={175} r={0} />
+            <Step x={x} y={155} w={75} h={38} label={b.label} sub={b.sub} color={b.color} />
+          </g>
+        );
+      })}
+      <text x="230" y="14" textAnchor="middle" fontSize="10" fill="var(--color-muted-foreground)">StAR protein (rate-limiting) moves cholesterol into mitochondria; CAH enzyme defects block specific branches</text>
+      <circle r="4.5" fill={violet.fg}>
+        <animateMotion dur="5s" repeatCount="indefinite" path="M 95 40 L 95 105" />
+      </circle>
+    </svg>
+  );
+}
+
+export function ThyroidHormoneSynthesisDiagram() {
+  const steps = ["Iodide trapping", "Oxidation (TPO)", "Organification", "Coupling", "T3 / T4 release"];
+  const colW = 100;
+  return (
+    <svg viewBox="0 0 520 120" className="w-full" role="img" aria-label="Thyroid hormone synthesis diagram">
+      <ArrowDefs />
+      {steps.map((s, i) => {
+        const x = 10 + i * colW;
+        return (
+          <g key={s}>
+            <Step x={x} y={40} w={86} h={40} label={s} color={i === 1 ? amber : teal} />
+            {i < steps.length - 1 && <Arrow x1={x + 86} y1={60} x2={x + colW - 4} y2={60} />}
+          </g>
+        );
+      })}
+      <circle r="4.5" fill={teal.fg}>
+        <animateMotion dur="6s" repeatCount="indefinite" path={`M 53 60 ${steps.map((_, i) => `L ${10 + i * colW + 43} 60`).join(" ")}`} />
+      </circle>
+      <text x="260" y="20" textAnchor="middle" fontSize="10.5" fill="var(--color-muted-foreground)">Thyroid peroxidase (TPO) drives oxidation, organification, and coupling — blocked by propylthiouracil/methimazole</text>
+      <text x="260" y="108" textAnchor="middle" fontSize="9.5" fill="var(--color-muted-foreground)">Thyroglobulin is the scaffold; T4 (more) and T3 (more active) are stored and released into blood</text>
+    </svg>
+  );
+}
+
+export function CoagulationCascadeDiagram() {
+  return (
+    <svg viewBox="0 0 460 210" className="w-full" role="img" aria-label="Coagulation cascade diagram">
+      <ArrowDefs />
+      <Step x={20} y={20} w={170} label="Extrinsic pathway" sub="Tissue factor + VII (PT)" color={rose} />
+      <Step x={270} y={20} w={170} label="Intrinsic pathway" sub="XII→XI→IX+VIII (PTT)" color={teal} />
+      <Arrow x1={105} y1={60} x2={200} y2={100} />
+      <Arrow x1={355} y1={60} x2={260} y2={100} />
+      <Step x={155} y={100} w={150} label="Factor X → Xa" sub="common pathway" color={amber} />
+      <Arrow x1={230} y1={140} x2={230} y2={160} />
+      <Step x={130} y={160} w={200} label="Prothrombin → Thrombin → Fibrin" color={violet} />
+
+      <circle r="4.5" fill={amber.fg}>
+        <animateMotion dur="5s" repeatCount="indefinite" path="M 105 45 L 230 120 L 230 180" />
+      </circle>
+      <text x="230" y="205" textAnchor="middle" fontSize="9.5" fill="var(--color-muted-foreground)">Warfarin blocks vitamin K-dependent factors (II, VII, IX, X) — PT/INR monitors this pathway</text>
+    </svg>
+  );
+}
+
+export function CalciumRegulationDiagram() {
+  const regulators = [
+    { label: "PTH", sub: "↑Ca²⁺, ↓PO₄³⁻", color: amber },
+    { label: "Vitamin D", sub: "↑gut Ca²⁺ absorption", color: teal },
+    { label: "Calcitonin", sub: "↓Ca²⁺ (weak effect)", color: rose },
+  ];
+  const cx = 230, cy = 110, r = 70;
+  return (
+    <svg viewBox="0 0 460 220" className="w-full" role="img" aria-label="Calcium regulation diagram">
+      <ArrowDefs />
+      <circle cx={cx} cy={cy} r={40} fill={violet.bg} stroke={violet.fg} strokeOpacity={0.4} />
+      <text x={cx} y={cy - 2} textAnchor="middle" fontSize="11" fontWeight={700} fill={violet.fg}>Serum</text>
+      <text x={cx} y={cy + 12} textAnchor="middle" fontSize="11" fontWeight={700} fill={violet.fg}>Ca²⁺</text>
+      {regulators.map((reg, i) => {
+        const angle = (i / 3) * 2 * Math.PI - Math.PI / 2;
+        const x = cx + r * Math.cos(angle);
+        const y = cy + r * Math.sin(angle);
+        return (
+          <g key={reg.label}>
+            <line x1={cx} y1={cy} x2={x} y2={y} stroke="var(--color-muted-foreground)" strokeOpacity={0.3} />
+            <circle cx={x} cy={y} r={38} fill={reg.color.bg} stroke={reg.color.fg} strokeOpacity={0.4} />
+            <text x={x} y={y - 3} textAnchor="middle" fontSize="10.5" fontWeight={700} fill={reg.color.fg}>{reg.label}</text>
+            <text x={x} y={y + 10} textAnchor="middle" fontSize="7.5" fill={reg.color.fg}>{reg.sub}</text>
+          </g>
+        );
+      })}
+      <text x="230" y="205" textAnchor="middle" fontSize="9.5" fill="var(--color-muted-foreground)">Vitamin D must be activated: skin/diet → liver (25-OH) → kidney (1,25-(OH)₂, PTH-stimulated)</text>
+    </svg>
+  );
+}
+
+export function BilirubinMetabolismDiagram() {
+  const steps = [
+    { label: "Heme", sub: "RBC breakdown (spleen)" },
+    { label: "Unconjugated bilirubin", sub: "albumin-bound" },
+    { label: "Conjugated bilirubin", sub: "liver, UGT1A1 ★" },
+    { label: "Urobilinogen", sub: "gut bacteria" },
+    { label: "Stercobilin / urobilin", sub: "stool / urine color" },
+  ];
+  const colW = 108;
+  return (
+    <svg viewBox={`0 0 ${steps.length * colW + 20} 130`} className="w-full" role="img" aria-label="Bilirubin metabolism diagram">
+      <ArrowDefs />
+      {steps.map((s, i) => {
+        const x = 10 + i * colW;
+        return (
+          <g key={s.label}>
+            <Step x={x} y={45} w={96} h={44} label={s.label} sub={s.sub} color={i === 2 ? amber : rose} />
+            {i < steps.length - 1 && <Arrow x1={x + 96} y1={67} x2={x + colW - 6} y2={67} />}
+          </g>
+        );
+      })}
+      <circle r="5" fill={rose.fg}>
+        <animateMotion dur="7s" repeatCount="indefinite" path={`M 58 67 ${steps.map((_, i) => `L ${10 + i * colW + 48} 67`).join(" ")}`} />
+      </circle>
+      <text x={(steps.length * colW + 20) / 2} y={20} textAnchor="middle" fontSize="10.5" fill="var(--color-muted-foreground)">Gilbert syndrome / neonatal jaundice: reduced UGT1A1 activity → unconjugated hyperbilirubinemia</text>
+    </svg>
+  );
+}
+
+export function MethionineTranssulfurationDiagram() {
+  return (
+    <svg viewBox="0 0 460 200" className="w-full" role="img" aria-label="Methionine transsulfuration diagram">
+      <ArrowDefs />
+      <Step x={20} y={20} w={140} label="Methionine" color={emerald} />
+      <Arrow x1={90} y1={60} x2={90} y2={78} />
+      <Step x={20} y={83} w={140} label="SAM" sub="methyl donor" color={amber} />
+      <Arrow x1={90} y1={123} x2={90} y2={141} />
+      <Step x={20} y={146} w={140} label="SAH → Homocysteine" color={rose} />
+
+      <Arrow x1={165} y1={168} x2={250} y2={168} />
+      <Step x={260} y={146} w={180} label="Cystathionine → Cysteine" sub="cystathionine β-synthase, B6-dependent" color={teal} />
+
+      <rect x="200" y="20" width="240" height="80" rx="10" fill={violet.bg} opacity={0.4} />
+      <text x="320" y="42" textAnchor="middle" fontSize="10" fontWeight={700} fill={violet.fg}>Remethylation (alternative)</text>
+      <text x="320" y="60" textAnchor="middle" fontSize="9.5" fill={violet.fg}>Homocysteine + N5-methyl-THF</text>
+      <text x="320" y="76" textAnchor="middle" fontSize="9.5" fill={violet.fg}>→ Methionine (B12-dependent)</text>
+
+      <circle r="4.5" fill={rose.fg}>
+        <animateMotion dur="6s" repeatCount="indefinite" path="M 90 40 L 90 103 L 90 168 L 350 168" />
+      </circle>
+      <text x="230" y="192" textAnchor="middle" fontSize="9.5" fill="var(--color-muted-foreground)">CBS deficiency (homocystinuria) causes marfanoid habitus, lens dislocation, and thrombosis</text>
+    </svg>
+  );
+}
+
+export function TranslationCycleDiagram() {
+  const cx = 230, cy = 110, r = 75;
+  const phases = [
+    { label: "Initiation", sub: "mRNA + small subunit + Met-tRNA", angle: -90 },
+    { label: "Elongation", sub: "aminoacyl-tRNA entry, peptide bond, translocation", angle: 30 },
+    { label: "Termination", sub: "stop codon, release factor", angle: 150 },
+  ];
+  return (
+    <svg viewBox="0 0 460 230" className="w-full" role="img" aria-label="Protein translation cycle diagram">
+      <ArrowDefs />
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke="var(--color-muted-foreground)" strokeOpacity={0.3} strokeWidth={1.5} />
+      {phases.map((p) => {
+        const rad = (p.angle * Math.PI) / 180;
+        const x = cx + r * Math.cos(rad);
+        const y = cy + r * Math.sin(rad);
+        const color = p.label === "Initiation" ? teal : p.label === "Elongation" ? amber : rose;
+        return (
+          <g key={p.label}>
+            <circle cx={x} cy={y} r={46} fill={color.bg} stroke={color.fg} strokeOpacity={0.35} />
+            <text x={x} y={y - 6} textAnchor="middle" fontSize="10.5" fontWeight={700} fill={color.fg}>{p.label}</text>
+            <foreignObject x={x - 40} y={y - 2} width="80" height="40">
+              <p style={{ fontSize: "7px", textAlign: "center", color: color.fg, lineHeight: 1.2, margin: 0 }}>{p.sub}</p>
+            </foreignObject>
+          </g>
+        );
+      })}
+      <circle r="5" fill={violet.fg}>
+        <animateMotion dur="5s" repeatCount="indefinite" path={`M ${cx + r} ${cy} A ${r} ${r} 0 1 1 ${cx + r - 0.01} ${cy}`} />
+      </circle>
+      <text x={cx} y="20" textAnchor="middle" fontSize="10" fill="var(--color-muted-foreground)">Aminoglycosides distort the 30S subunit (misreading); macrolides block the 50S exit tunnel</text>
+    </svg>
+  );
+}
+
+export function CampSignalingDiagram() {
+  const steps = ["Hormone", "GPCR", "Gs protein", "Adenylate cyclase", "cAMP", "Protein kinase A", "Phosphorylated target"];
+  const colW = 88;
+  return (
+    <svg viewBox={`0 0 ${steps.length * colW + 20} 110`} className="w-full" role="img" aria-label="cAMP signaling cascade diagram">
+      <ArrowDefs />
+      {steps.map((s, i) => {
+        const x = 10 + i * colW;
+        return (
+          <g key={s}>
+            <Step x={x} y={35} w={76} h={40} label={s} color={i === 4 ? amber : violet} />
+            {i < steps.length - 1 && <Arrow x1={x + 76} y1={55} x2={x + colW - 4} y2={55} />}
+          </g>
+        );
+      })}
+      <circle r="4.5" fill={amber.fg}>
+        <animateMotion dur="7s" repeatCount="indefinite" path={`M 48 55 ${steps.map((_, i) => `L ${10 + i * colW + 38} 55`).join(" ")}`} />
+      </circle>
+      <text x={(steps.length * colW + 20) / 2} y="18" textAnchor="middle" fontSize="10" fill="var(--color-muted-foreground)">Second-messenger amplification — one hormone molecule activates many PKA targets (signal cascade)</text>
+      <text x={(steps.length * colW + 20) / 2} y="100" textAnchor="middle" fontSize="9.5" fill="var(--color-muted-foreground)">Cholera toxin locks Gs "on"; pertussis toxin locks Gi "off" — both raise cAMP</text>
+    </svg>
+  );
+}
+
+export function VitaminDActivationDiagram() {
+  const steps = [
+    { label: "7-Dehydrocholesterol", sub: "skin, UV light" },
+    { label: "Cholecalciferol (D3)", sub: "skin/diet" },
+    { label: "25-OH-D", sub: "liver hydroxylation" },
+    { label: "1,25-(OH)₂-D", sub: "kidney, PTH-stimulated ★" },
+  ];
+  const colW = 128;
+  return (
+    <svg viewBox={`0 0 ${steps.length * colW + 20} 120`} className="w-full" role="img" aria-label="Vitamin D activation pathway diagram">
+      <ArrowDefs />
+      {steps.map((s, i) => {
+        const x = 10 + i * colW;
+        return (
+          <g key={s.label}>
+            <Step x={x} y={40} w={114} h={44} label={s.label} sub={s.sub} color={i === 3 ? amber : teal} />
+            {i < steps.length - 1 && <Arrow x1={x + 114} y1={62} x2={x + colW - 6} y2={62} />}
+          </g>
+        );
+      })}
+      <circle r="5" fill={teal.fg}>
+        <animateMotion dur="6s" repeatCount="indefinite" path={`M 67 62 ${steps.map((_, i) => `L ${10 + i * colW + 57} 62`).join(" ")}`} />
+      </circle>
+      <text x={(steps.length * colW + 20) / 2} y="20" textAnchor="middle" fontSize="10.5" fill="var(--color-muted-foreground)">The kidney's 1α-hydroxylase step is rate-limiting and stimulated by PTH — impaired in chronic kidney disease</text>
+    </svg>
+  );
+}

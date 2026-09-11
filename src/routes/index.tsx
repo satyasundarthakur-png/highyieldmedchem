@@ -41,6 +41,18 @@ import {
   DigestionJourneyDiagram,
   AcidBaseBufferDiagram,
   PcrCycleDiagram,
+  FattyAcidSynthesisDiagram,
+  KetogenesisDiagram,
+  OneCarbonFolateDiagram,
+  AdrenalSteroidogenesisDiagram,
+  ThyroidHormoneSynthesisDiagram,
+  CoagulationCascadeDiagram,
+  CalciumRegulationDiagram,
+  BilirubinMetabolismDiagram,
+  MethionineTranssulfurationDiagram,
+  TranslationCycleDiagram,
+  CampSignalingDiagram,
+  VitaminDActivationDiagram,
 } from "@/components/pathway-diagrams";
 
 type Tab = "sheets" | "flashcards" | "compounds" | "diagrams" | "practical";
@@ -130,7 +142,7 @@ function LandingPage({ onEnter }: { onEnter: (tab: Tab) => void }) {
   const stats = [
     { label: "Chapters", value: "22" },
     { label: "High-yield facts", value: `${FACTS.length}+` },
-    { label: "Animated diagrams", value: "18" },
+    { label: "Animated diagrams", value: "30" },
     { label: "Compounds", value: "99" },
   ];
   const features: { tab: Tab; title: string; description: string; icon: ReactNode; color: { bg: string; fg: string; ring: string } }[] = [
@@ -506,6 +518,18 @@ const DIAGRAMS: { topicId: string; title: string; description: string; pearl: st
   { topicId: "water-electrolyte", title: "Bicarbonate Buffer System", description: "CO₂/HCO₃⁻ equilibrium — how lungs and kidneys defend blood pH.", pearl: "Respiratory compensation for a metabolic acidosis is fast (minutes — Kussmaul breathing blows off CO₂); renal compensation for a respiratory disorder is slow, taking 3-5 days to fully adjust bicarbonate reabsorption.", Component: AcidBaseBufferDiagram },
   { topicId: "endocrine", title: "Insulin vs Glucagon", description: "The reciprocal hormone see-saw between the fed and fasting state.", pearl: "In diabetic ketoacidosis, absolute insulin deficiency leaves glucagon's actions unopposed — unchecked lipolysis and ketogenesis drive the characteristic anion-gap metabolic acidosis.", Component: InsulinGlucagonDiagram },
   { topicId: "digestion", title: "Digestive Tract Journey", description: "One bolus, five stages — what happens at each stop.", pearl: "Pancreatic exocrine insufficiency (chronic pancreatitis, cystic fibrosis) impairs fat digestion, causing steatorrhea — foul-smelling, greasy, floating stools and fat-soluble vitamin (A, D, E, K) deficiency.", Component: DigestionJourneyDiagram },
+  { topicId: "lipid", title: "Fatty Acid Synthesis", description: "Acetyl-CoA to palmitate — the cytosolic build-up pathway, opposite of beta-oxidation.", pearl: "Acetyl-CoA carboxylase (ACC) is the rate-limiting, biotin-dependent enzyme — inhibited by its own product (palmitoyl-CoA) and activated by citrate and insulin.", Component: FattyAcidSynthesisDiagram },
+  { topicId: "lipid", title: "Ketogenesis", description: "Liver-only pathway making acetoacetate, β-hydroxybutyrate, and acetone from acetyl-CoA.", pearl: "The liver makes ketones but cannot use them — it lacks thiophorase (succinyl-CoA:3-ketoacid CoA transferase), the enzyme needed to reactivate acetoacetate in peripheral tissues.", Component: KetogenesisDiagram },
+  { topicId: "amino-acid", title: "One-Carbon (Folate) Cycle", description: "How methionine synthase links vitamin B12 and folate to regenerate methionine.", pearl: "Blocking this cycle (B12/folate deficiency) traps folate as N5-methyl-THF ('folate trap'), which is why folate can mask but not fix the neurologic damage of B12 deficiency.", Component: OneCarbonFolateDiagram },
+  { topicId: "endocrine", title: "Adrenal Steroidogenesis", description: "Cholesterol branches into cortisol, aldosterone, and androgens by adrenal zone.", pearl: "21-hydroxylase deficiency (the most common congenital adrenal hyperplasia) blocks cortisol and aldosterone synthesis, shunting precursors toward androgens — causing virilization and salt-wasting.", Component: AdrenalSteroidogenesisDiagram },
+  { topicId: "endocrine", title: "Thyroid Hormone Synthesis", description: "Iodide trapping through T3/T4 release — where antithyroid drugs act.", pearl: "Propylthiouracil and methimazole both inhibit thyroid peroxidase; PTU additionally blocks peripheral T4-to-T3 conversion, making it preferred in thyroid storm.", Component: ThyroidHormoneSynthesisDiagram },
+  { topicId: "plasma-proteins", title: "Coagulation Cascade", description: "Extrinsic and intrinsic pathways converging on the common pathway to fibrin.", pearl: "Warfarin inhibits vitamin K epoxide reductase, reducing functional factors II, VII, IX, and X — PT/INR (extrinsic-sensitive) is used to monitor its effect.", Component: CoagulationCascadeDiagram },
+  { topicId: "water-electrolyte", title: "Calcium Regulation (PTH / Vitamin D / Calcitonin)", description: "The three-hormone triangle that defends serum calcium.", pearl: "Chronic kidney disease impairs the kidney's 1α-hydroxylase step, lowering active vitamin D and driving secondary hyperparathyroidism with renal osteodystrophy.", Component: CalciumRegulationDiagram },
+  { topicId: "heme", title: "Bilirubin Metabolism & Jaundice", description: "Heme breakdown to unconjugated, then conjugated bilirubin, to urobilinogen.", pearl: "Neonatal physiologic jaundice and Gilbert syndrome both reflect reduced UGT1A1 activity — unconjugated hyperbilirubinemia without dark urine, since unconjugated bilirubin isn't water-soluble enough to be excreted renally.", Component: BilirubinMetabolismDiagram },
+  { topicId: "amino-acid", title: "Methionine / Transsulfuration", description: "Methionine → SAM → homocysteine, then either remethylated or converted to cysteine.", pearl: "Cystathionine beta-synthase (CBS) deficiency causes homocystinuria — marfanoid habitus, downward lens dislocation, and a high risk of thrombosis, distinguishing it from Marfan syndrome (upward lens dislocation).", Component: MethionineTranssulfurationDiagram },
+  { topicId: "molbio", title: "Protein Translation Cycle", description: "Initiation, elongation, and termination on the ribosome.", pearl: "Aminoglycosides cause misreading by distorting the 30S subunit; macrolides and chloramphenicol block the 50S subunit — a favorite pharmacology-biochemistry crossover question.", Component: TranslationCycleDiagram },
+  { topicId: "endocrine", title: "cAMP Second-Messenger Signaling", description: "Hormone → GPCR → Gs → adenylate cyclase → cAMP → PKA cascade.", pearl: "Cholera toxin permanently activates Gs (locks cAMP high, causing massive fluid secretion); pertussis toxin permanently inactivates Gi — both act by ADP-ribosylating the G protein.", Component: CampSignalingDiagram },
+  { topicId: "vitamins", title: "Vitamin D Activation", description: "Skin/diet to the kidney's active hormone form, 1,25-(OH)₂-D.", pearl: "The kidney's 1α-hydroxylase step is stimulated by PTH and is rate-limiting — this is why chronic kidney disease leads to functional vitamin D deficiency despite normal dietary intake.", Component: VitaminDActivationDiagram },
 ];
 
 function ClinicalPearl({ text, color }: { text: string; color: { bg: string; fg: string } }) {
