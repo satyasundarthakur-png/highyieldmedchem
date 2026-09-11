@@ -53,6 +53,21 @@ import {
   TranslationCycleDiagram,
   CampSignalingDiagram,
   VitaminDActivationDiagram,
+  CoriCycleDiagram,
+  GlucoseAlanineCycleDiagram,
+  GlycationDiagram,
+  CollagenSynthesisDiagram,
+  ImmunoglobulinStructureDiagram,
+  AntioxidantDefenseDiagram,
+  XenobioticMetabolismDiagram,
+  VitaminKCycleDiagram,
+  IronMetabolismDiagram,
+  NeurotransmitterSynthesisDiagram,
+  BcaaCatabolismDiagram,
+  ZymogenActivationDiagram,
+  StarvationTimelineDiagram,
+  B12AbsorptionDiagram,
+  ElisaWorkflowDiagram,
 } from "@/components/pathway-diagrams";
 
 type Tab = "sheets" | "flashcards" | "compounds" | "diagrams" | "practical";
@@ -142,7 +157,7 @@ function LandingPage({ onEnter }: { onEnter: (tab: Tab) => void }) {
   const stats = [
     { label: "Chapters", value: "22" },
     { label: "High-yield facts", value: `${FACTS.length}+` },
-    { label: "Animated diagrams", value: "30" },
+    { label: "Animated diagrams", value: "45" },
     { label: "Compounds", value: "99" },
   ];
   const features: { tab: Tab; title: string; description: string; icon: ReactNode; color: { bg: string; fg: string; ring: string } }[] = [
@@ -530,6 +545,21 @@ const DIAGRAMS: { topicId: string; title: string; description: string; pearl: st
   { topicId: "molbio", title: "Protein Translation Cycle", description: "Initiation, elongation, and termination on the ribosome.", pearl: "Aminoglycosides cause misreading by distorting the 30S subunit; macrolides and chloramphenicol block the 50S subunit — a favorite pharmacology-biochemistry crossover question.", Component: TranslationCycleDiagram },
   { topicId: "endocrine", title: "cAMP Second-Messenger Signaling", description: "Hormone → GPCR → Gs → adenylate cyclase → cAMP → PKA cascade.", pearl: "Cholera toxin permanently activates Gs (locks cAMP high, causing massive fluid secretion); pertussis toxin permanently inactivates Gi — both act by ADP-ribosylating the G protein.", Component: CampSignalingDiagram },
   { topicId: "vitamins", title: "Vitamin D Activation", description: "Skin/diet to the kidney's active hormone form, 1,25-(OH)₂-D.", pearl: "The kidney's 1α-hydroxylase step is stimulated by PTH and is rate-limiting — this is why chronic kidney disease leads to functional vitamin D deficiency despite normal dietary intake.", Component: VitaminDActivationDiagram },
+  { topicId: "glycolysis", title: "Cori Cycle", description: "Muscle lactate returns to the liver to be rebuilt into glucose.", pearl: "Shifts the ATP cost of gluconeogenesis from exercising muscle to the liver — a key reason muscle can sustain anaerobic activity without running out of glucose.", Component: CoriCycleDiagram },
+  { topicId: "amino-acid", title: "Glucose-Alanine Cycle", description: "How muscle exports nitrogen to the liver disguised as alanine.", pearl: "Lets muscle dispose of amino-acid nitrogen without making ammonia locally — the liver converts the nitrogen to urea and returns glucose via gluconeogenesis.", Component: GlucoseAlanineCycleDiagram },
+  { topicId: "organ-function", title: "Glycation & HbA1c Formation", description: "Nonenzymatic glucose attachment to hemoglobin — the basis of the HbA1c test.", pearl: "HbA1c reflects average glycemic control over the preceding ~3 months (the RBC lifespan), making it far more useful than a single fasting glucose for long-term diabetes monitoring.", Component: GlycationDiagram },
+  { topicId: "ecm", title: "Collagen Synthesis", description: "From pre-procollagen through hydroxylation to cross-linked fibrils.", pearl: "Scurvy (vitamin C deficiency) blocks hydroxylation; Menkes disease (copper transport defect) blocks lysyl oxidase cross-linking — both weaken connective tissue by different mechanisms.", Component: CollagenSynthesisDiagram },
+  { topicId: "plasma-proteins", title: "Immunoglobulin Structure", description: "Heavy and light chains, Fab antigen-binding site, Fc effector region.", pearl: "Multiple myeloma produces a monoclonal antibody (M-spike); its light chains alone (Bence Jones proteins) can appear in urine and damage renal tubules.", Component: ImmunoglobulinStructureDiagram },
+  { topicId: "free-radicals", title: "Antioxidant Defense Cascade", description: "Superoxide → hydrogen peroxide → water, via SOD, catalase, and glutathione peroxidase.", pearl: "G6PD deficiency reduces NADPH available to regenerate glutathione, weakening this whole cascade — the mechanistic link to oxidative hemolysis after fava beans or sulfa drugs.", Component: AntioxidantDefenseDiagram },
+  { topicId: "free-radicals", title: "Xenobiotic Metabolism (Phase I / II)", description: "Cytochrome P450 oxidation, then conjugation, to clear drugs and toxins.", pearl: "In paracetamol overdose, depleted glutathione lets the toxic Phase I metabolite NAPQI accumulate — N-acetylcysteine treats this by replenishing glutathione.", Component: XenobioticMetabolismDiagram },
+  { topicId: "vitamins", title: "Vitamin K Cycle & Warfarin", description: "How γ-carboxylation activates clotting factors, and where warfarin blocks it.", pearl: "Warfarin inhibits VKORC1 (epoxide reductase), depleting the reduced vitamin K needed to activate factors II, VII, IX, and X — reversed by vitamin K administration or fresh frozen plasma in bleeding emergencies.", Component: VitaminKCycleDiagram },
+  { topicId: "heme", title: "Iron Metabolism & Hepcidin", description: "Absorption, ferroportin export, transferrin transport, and hepcidin control.", pearl: "In anemia of chronic disease, inflammation raises hepcidin, which degrades ferroportin and traps iron inside cells — serum iron is low despite normal or high ferritin (unlike true iron deficiency).", Component: IronMetabolismDiagram },
+  { topicId: "amino-acid", title: "Amino Acid-Derived Neurotransmitters", description: "Tryptophan → serotonin → melatonin; tyrosine → catecholamines.", pearl: "Carcinoid syndrome diverts so much tryptophan toward serotonin that niacin (B3) synthesis falls, producing pellagra-like symptoms (dermatitis, diarrhea) alongside flushing and diarrhea.", Component: NeurotransmitterSynthesisDiagram },
+  { topicId: "iem", title: "Branched-Chain Amino Acid Catabolism", description: "Leucine, isoleucine, valine breakdown — and where maple syrup urine disease blocks it.", pearl: "The deficient enzyme (branched-chain α-ketoacid dehydrogenase) is lipoic-acid dependent, just like pyruvate dehydrogenase — both fail in thiamine-related cofactor problems, but MSUD is a primary enzyme defect.", Component: BcaaCatabolismDiagram },
+  { topicId: "digestion", title: "Zymogen Activation Cascade", description: "Enteropeptidase-triggered trypsin unlocks every other pancreatic protease.", pearl: "Hereditary pancreatitis can result from mutations that prevent trypsin self-inactivation, allowing premature intrapancreatic activation of the whole zymogen cascade — autodigestion of the pancreas.", Component: ZymogenActivationDiagram },
+  { topicId: "nutrition", title: "Starvation Fuel Metabolism Timeline", description: "How fuel sources shift from glycogen to gluconeogenesis to ketones over a prolonged fast.", pearl: "By minimizing muscle protein breakdown once ketones rise, the body preserves lean mass during prolonged starvation — a survival adaptation exploited (in a controlled way) by therapeutic ketogenic diets.", Component: StarvationTimelineDiagram },
+  { topicId: "digestion", title: "Vitamin B12 Absorption", description: "From food-bound B12 to intrinsic-factor-mediated ileal uptake.", pearl: "Pernicious anemia — autoimmune loss of parietal cells or anti-intrinsic-factor antibodies — is the classic cause of B12 deficiency distinct from simple dietary lack (common in strict vegans).", Component: B12AbsorptionDiagram },
+  { topicId: "biotech", title: "ELISA Workflow", description: "Plate coating through absorbance reading — the 5-step immunoassay.", pearl: "ELISA remains the front-line screening test for HIV (paired with confirmatory Western blot) and is the basis of quantitative hormone assays like urine hCG pregnancy tests.", Component: ElisaWorkflowDiagram },
 ];
 
 function ClinicalPearl({ text, color }: { text: string; color: { bg: string; fg: string } }) {

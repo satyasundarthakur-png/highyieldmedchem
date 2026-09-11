@@ -911,3 +911,392 @@ export function VitaminDActivationDiagram() {
     </svg>
   );
 }
+
+export function CoriCycleDiagram() {
+  return (
+    <svg viewBox="0 0 460 210" className="w-full" role="img" aria-label="Cori cycle diagram">
+      <ArrowDefs />
+      <rect x="20" y="20" width="180" height="170" rx="14" fill={rose.bg} opacity={0.3} />
+      <text x="110" y="38" textAnchor="middle" fontSize="10.5" fontWeight={700} fill={rose.fg}>Muscle</text>
+      <Step x={40} y={55} w={140} label="Glucose" color={rose} />
+      <Arrow x1={110} y1={95} x2={110} y2={113} />
+      <Step x={40} y={118} w={140} label="Pyruvate → Lactate" color={rose} />
+
+      <rect x="260" y="20" width="180" height="170" rx="14" fill={teal.bg} opacity={0.3} />
+      <text x="350" y="38" textAnchor="middle" fontSize="10.5" fontWeight={700} fill={teal.fg}>Liver</text>
+      <Step x={280} y={118} w={140} label="Lactate → Pyruvate" color={teal} />
+      <Arrow x1={350} y1={113} x2={350} y2={95} />
+      <Step x={280} y={55} w={140} label="Glucose (gluconeogenesis)" color={teal} />
+
+      <Arrow x1={180} y1={130} x2={278} y2={130} />
+      <text x="230" y="122" textAnchor="middle" fontSize="8.5" fill="var(--color-muted-foreground)">blood</text>
+      <Arrow x1={280} y1={65} x2={182} y2={65} />
+      <text x="230" y="57" textAnchor="middle" fontSize="8.5" fill="var(--color-muted-foreground)">blood</text>
+
+      <circle r="4.5" fill={amber.fg}>
+        <animateMotion dur="6s" repeatCount="indefinite" path="M 110 75 L 110 130 L 350 130 L 350 75 L 110 75" />
+      </circle>
+      <text x="230" y="200" textAnchor="middle" fontSize="9.5" fill="var(--color-muted-foreground)">Shifts the ATP cost of gluconeogenesis to the liver during intense exercise</text>
+    </svg>
+  );
+}
+
+export function GlucoseAlanineCycleDiagram() {
+  return (
+    <svg viewBox="0 0 460 210" className="w-full" role="img" aria-label="Glucose-alanine cycle diagram">
+      <ArrowDefs />
+      <rect x="20" y="20" width="180" height="170" rx="14" fill={violet.bg} opacity={0.3} />
+      <text x="110" y="38" textAnchor="middle" fontSize="10.5" fontWeight={700} fill={violet.fg}>Muscle</text>
+      <Step x={40} y={55} w={140} label="Pyruvate + amino acid N" color={violet} />
+      <Arrow x1={110} y1={95} x2={110} y2={113} />
+      <Step x={40} y={118} w={140} label="Alanine" color={violet} />
+
+      <rect x="260" y="20" width="180" height="170" rx="14" fill={amber.bg} opacity={0.3} />
+      <text x="350" y="38" textAnchor="middle" fontSize="10.5" fontWeight={700} fill={amber.fg}>Liver</text>
+      <Step x={280} y={118} w={140} label="Alanine → Pyruvate + NH₃" color={amber} />
+      <Arrow x1={350} y1={113} x2={350} y2={95} />
+      <Step x={280} y={55} w={140} label="Glucose + Urea" color={amber} />
+
+      <Arrow x1={180} y1={130} x2={278} y2={130} />
+      <Arrow x1={280} y1={65} x2={182} y2={65} />
+
+      <circle r="4.5" fill={rose.fg}>
+        <animateMotion dur="6s" repeatCount="indefinite" path="M 110 75 L 110 130 L 350 130 L 350 75 L 110 75" />
+      </circle>
+      <text x="230" y="200" textAnchor="middle" fontSize="9.5" fill="var(--color-muted-foreground)">Carries nitrogen (as alanine) from muscle to liver for urea synthesis, and carbon back as glucose</text>
+    </svg>
+  );
+}
+
+export function GlycationDiagram() {
+  return (
+    <svg viewBox="0 0 460 170" className="w-full" role="img" aria-label="Nonenzymatic glycation and HbA1c diagram">
+      <ArrowDefs />
+      <Step x={20} y={40} w={150} label="Glucose" color={teal} />
+      <Arrow x1={170} y1={60} x2={198} y2={60} />
+      <Step x={200} y={40} w={130} label="Hemoglobin" color={teal} />
+      <Arrow x1={330} y1={60} x2={358} y2={60} />
+      <circle cx="380" cy="60" r="42" fill={amber.bg} stroke={amber.fg} strokeOpacity={0.4} />
+      <text x="380" y="56" textAnchor="middle" fontSize="10.5" fontWeight={700} fill={amber.fg}>HbA1c</text>
+      <text x="380" y="70" textAnchor="middle" fontSize="8" fill={amber.fg}>glycated Hb</text>
+
+      <rect x="20" y="110" width="400" height="46" rx="10" fill={rose.bg} opacity={0.5} />
+      <text x="220" y="128" textAnchor="middle" fontSize="10" fill={rose.fg}>Nonenzymatic — no enzyme needed, proportional to average glucose over the RBC lifespan</text>
+      <text x="220" y="145" textAnchor="middle" fontSize="9.5" fill={rose.fg}>Reflects glycemic control over the prior ~3 months (RBC lifespan ≈ 120 days)</text>
+
+      <circle r="4.5" fill={teal.fg}>
+        <animateMotion dur="4s" repeatCount="indefinite" path="M 95 55 L 265 55 L 380 55" />
+      </circle>
+    </svg>
+  );
+}
+
+export function CollagenSynthesisDiagram() {
+  const steps = ["Pre-procollagen (ER)", "Hydroxylation", "Triple helix formation", "Secretion (Golgi)", "Cross-linking (lysyl oxidase)"];
+  const colW = 108;
+  return (
+    <svg viewBox={`0 0 ${steps.length * colW + 20} 130`} className="w-full" role="img" aria-label="Collagen synthesis diagram">
+      <ArrowDefs />
+      {steps.map((s, i) => {
+        const x = 10 + i * colW;
+        const color = i === 1 ? amber : i === 4 ? rose : violet;
+        return (
+          <g key={s}>
+            <Step x={x} y={45} w={96} h={44} label={s} color={color} />
+            {i < steps.length - 1 && <Arrow x1={x + 96} y1={67} x2={x + colW - 6} y2={67} />}
+          </g>
+        );
+      })}
+      <circle r="5" fill={violet.fg}>
+        <animateMotion dur="7s" repeatCount="indefinite" path={`M 58 67 ${steps.map((_, i) => `L ${10 + i * colW + 48} 67`).join(" ")}`} />
+      </circle>
+      <text x={(steps.length * colW + 20) / 2} y={20} textAnchor="middle" fontSize="10" fill="var(--color-muted-foreground)">Vitamin C is needed for hydroxylation; copper for lysyl oxidase cross-linking — both fail in their respective deficiencies</text>
+    </svg>
+  );
+}
+
+export function ImmunoglobulinStructureDiagram() {
+  return (
+    <svg viewBox="0 0 420 220" className="w-full" role="img" aria-label="Immunoglobulin structure diagram">
+      <ArrowDefs />
+      <line x1="210" y1="20" x2="140" y2="90" stroke={violet.fg} strokeWidth={6} strokeOpacity={0.5} strokeLinecap="round" />
+      <line x1="210" y1="20" x2="280" y2="90" stroke={violet.fg} strokeWidth={6} strokeOpacity={0.5} strokeLinecap="round" />
+      <line x1="140" y1="90" x2="140" y2="180" stroke={teal.fg} strokeWidth={8} strokeOpacity={0.5} strokeLinecap="round" />
+      <line x1="280" y1="90" x2="280" y2="180" stroke={teal.fg} strokeWidth={8} strokeOpacity={0.5} strokeLinecap="round" />
+      <line x1="140" y1="90" x2="280" y2="90" stroke={amber.fg} strokeWidth={5} strokeOpacity={0.5} />
+
+      <text x="100" y="55" fontSize="9.5" fontWeight={700} fill={violet.fg}>Light chain</text>
+      <text x="290" y="140" fontSize="9.5" fontWeight={700} fill={teal.fg}>Heavy chain</text>
+      <text x="145" y="105" fontSize="8.5" fontWeight={700} fill={amber.fg}>Hinge (disulfide)</text>
+
+      <circle cx="140" cy="55" r="16" fill={rose.bg} stroke={rose.fg} strokeOpacity={0.4} />
+      <text x="140" y="59" textAnchor="middle" fontSize="7.5" fontWeight={700} fill={rose.fg}>VL</text>
+      <circle cx="280" cy="55" r="16" fill={rose.bg} stroke={rose.fg} strokeOpacity={0.4} />
+      <text x="280" y="59" textAnchor="middle" fontSize="7.5" fontWeight={700} fill={rose.fg}>VH</text>
+      <text x="210" y="10" textAnchor="middle" fontSize="9" fill={rose.fg}>Fab — variable regions bind antigen</text>
+
+      <rect x="115" y="140" width="190" height="50" rx="8" fill={emerald.bg} opacity={0.4} />
+      <text x="210" y="170" textAnchor="middle" fontSize="9.5" fontWeight={700} fill={emerald.fg}>Fc region — effector function</text>
+
+      <text x="210" y="210" textAnchor="middle" fontSize="9.5" fill="var(--color-muted-foreground)">2 heavy + 2 light chains; Fab binds antigen, Fc mediates complement/phagocyte binding</text>
+    </svg>
+  );
+}
+
+export function AntioxidantDefenseDiagram() {
+  return (
+    <svg viewBox="0 0 460 170" className="w-full" role="img" aria-label="Antioxidant defense cascade diagram">
+      <ArrowDefs />
+      <Step x={10} y={45} w={110} label="O₂•⁻" sub="superoxide" color={rose} />
+      <Arrow x1={120} y1={65} x2={148} y2={65} />
+      <text x="134" y="55" textAnchor="middle" fontSize="8" fontWeight={700} fill={amber.fg}>SOD</text>
+      <Step x={150} y={45} w={110} label="H₂O₂" color={amber} />
+      <Arrow x1={260} y1={65} x2={288} y2={65} />
+      <text x="274" y="55" textAnchor="middle" fontSize="8" fontWeight={700} fill={teal.fg}>Catalase / GPx</text>
+      <Step x={290} y={45} w={160} label="H₂O + O₂" color={teal} />
+
+      <rect x="10" y="105" width="440" height="46" rx="10" fill={violet.bg} opacity={0.4} />
+      <text x="230" y="123" textAnchor="middle" fontSize="10" fill={violet.fg}>Glutathione peroxidase is selenium-dependent; regenerating reduced glutathione needs NADPH (HMP shunt)</text>
+      <text x="230" y="140" textAnchor="middle" fontSize="9.5" fill={violet.fg}>G6PD deficiency → less NADPH → weaker antioxidant defense → RBC oxidative hemolysis</text>
+
+      <circle r="4.5" fill={rose.fg}>
+        <animateMotion dur="4.5s" repeatCount="indefinite" path="M 65 65 L 205 65 L 370 65" />
+      </circle>
+    </svg>
+  );
+}
+
+export function XenobioticMetabolismDiagram() {
+  return (
+    <svg viewBox="0 0 460 170" className="w-full" role="img" aria-label="Xenobiotic Phase I and Phase II metabolism diagram">
+      <ArrowDefs />
+      <Step x={20} y={50} w={140} label="Drug / xenobiotic" color={teal} />
+      <Arrow x1={160} y1={70} x2={188} y2={70} />
+      <Step x={190} y={50} w={140} label="Phase I" sub="Cytochrome P450 oxidation" color={amber} />
+      <Arrow x1={330} y1={70} x2={358} y2={70} />
+
+      <g transform="translate(40,0)">
+        <Step x={330} y={50} w={100} h={40} label="Phase II" sub="conjugation" color={rose} />
+      </g>
+
+      <rect x="20" y="110" width="410" height="46" rx="10" fill={violet.bg} opacity={0.4} />
+      <text x="225" y="128" textAnchor="middle" fontSize="10" fill={violet.fg}>Phase II adds glucuronic acid, sulfate, or glutathione — increases water solubility for renal/biliary excretion</text>
+      <text x="225" y="145" textAnchor="middle" fontSize="9.5" fill={violet.fg}>Paracetamol overdose: glutathione depletion lets the toxic Phase I metabolite (NAPQI) accumulate</text>
+
+      <circle r="4.5" fill={amber.fg}>
+        <animateMotion dur="4.5s" repeatCount="indefinite" path="M 90 70 L 260 70 L 380 70" />
+      </circle>
+    </svg>
+  );
+}
+
+export function VitaminKCycleDiagram() {
+  return (
+    <svg viewBox="0 0 460 170" className="w-full" role="img" aria-label="Vitamin K cycle and warfarin diagram">
+      <ArrowDefs />
+      <Step x={20} y={30} w={170} label="Vitamin K (reduced)" color={teal} />
+      <Arrow x1={190} y1={50} x2={220} y2={50} />
+      <text x="205" y="42" textAnchor="middle" fontSize="8" fontWeight={700} fill={amber.fg}>γ-carboxylase</text>
+      <Step x={230} y={30} w={210} label="Clotting factors II, VII, IX, X activated" color={amber} />
+
+      <Arrow x1={315} y1={70} x2={315} y2={90} />
+      <Step x={230} y={95} w={210} label="Vitamin K epoxide" color={rose} />
+      <path d="M 230 115 L 90 115 L 90 70" stroke={violet.fg} strokeWidth={1.8} fill="none" markerEnd="url(#arrowhead)" opacity={0.6} />
+      <text x="130" y="130" fontSize="8.5" fontWeight={700} fill={violet.fg}>epoxide reductase (VKORC1)</text>
+      <rect x="20" y="140" width="420" height="26" rx="7" fill={rose.bg} opacity={0.5} />
+      <text x="230" y="157" textAnchor="middle" fontSize="9.5" fill={rose.fg}>Warfarin blocks VKORC1 — depletes active vitamin K, lowering factors II, VII, IX, X</text>
+
+      <circle r="4.5" fill={amber.fg}>
+        <animateMotion dur="5s" repeatCount="indefinite" path="M 105 50 L 315 50 L 315 105 L 90 105 L 90 50" />
+      </circle>
+    </svg>
+  );
+}
+
+export function IronMetabolismDiagram() {
+  return (
+    <svg viewBox="0 0 460 190" className="w-full" role="img" aria-label="Iron metabolism and hepcidin diagram">
+      <ArrowDefs />
+      <Step x={20} y={30} w={140} label="Dietary Fe²⁺" sub="duodenal absorption" color={teal} />
+      <Arrow x1={160} y1={50} x2={188} y2={50} />
+      <Step x={190} y={30} w={130} label="Ferroportin" sub="exports Fe from cell" color={amber} />
+      <Arrow x1={320} y1={50} x2={348} y2={50} />
+      <Step x={350} y={30} w={100} label="Transferrin" sub="plasma transport" color={violet} />
+
+      <circle cx="255" cy="130" r="48" fill={rose.bg} stroke={rose.fg} strokeOpacity={0.4} />
+      <text x="255" y="126" textAnchor="middle" fontSize="10.5" fontWeight={700} fill={rose.fg}>Hepcidin</text>
+      <text x="255" y="140" textAnchor="middle" fontSize="8" fill={rose.fg}>↑ inflammation</text>
+      <path d="M 255 90 L 255 70" stroke={rose.fg} strokeWidth={2} markerEnd="url(#arrowhead)" opacity={0.6} />
+      <text x="255" y="80" textAnchor="middle" fontSize="8" fill={rose.fg}>degrades ferroportin</text>
+
+      <rect x="20" y="160" width="420" height="26" rx="7" fill={teal.bg} opacity={0.4} />
+      <text x="230" y="177" textAnchor="middle" fontSize="9.5" fill={teal.fg}>Anemia of chronic disease: hepcidin ↑ traps iron in cells — low serum iron despite normal/high ferritin</text>
+
+      <circle r="4.5" fill={amber.fg}>
+        <animateMotion dur="5s" repeatCount="indefinite" path="M 90 50 L 255 50 L 400 50" />
+      </circle>
+    </svg>
+  );
+}
+
+export function NeurotransmitterSynthesisDiagram() {
+  return (
+    <svg viewBox="0 0 460 190" className="w-full" role="img" aria-label="Amino acid-derived neurotransmitter synthesis diagram">
+      <ArrowDefs />
+      <Step x={20} y={30} w={120} label="Tryptophan" color={violet} />
+      <Arrow x1={80} y1={70} x2={80} y2={88} />
+      <Step x={20} y={93} w={120} label="Serotonin" color={violet} />
+      <Arrow x1={80} y1={133} x2={80} y2={151} />
+      <Step x={20} y={156} w={120} label="Melatonin" color={violet} />
+
+      <Step x={320} y={30} w={120} label="Tyrosine" color={amber} />
+      <Arrow x1={380} y1={70} x2={380} y2={88} />
+      <Step x={320} y={93} w={120} label="Dopamine" color={amber} />
+      <Arrow x1={380} y1={133} x2={380} y2={151} />
+      <Step x={320} y={156} w={120} label="Norepinephrine → Epinephrine" color={amber} />
+
+      <circle r="4.5" fill={violet.fg}>
+        <animateMotion dur="5s" repeatCount="indefinite" path="M 80 50 L 80 113 L 80 176" />
+      </circle>
+      <circle r="4.5" fill={amber.fg}>
+        <animateMotion dur="5s" repeatCount="indefinite" path="M 380 50 L 380 113 L 380 176" />
+      </circle>
+      <text x="230" y="20" textAnchor="middle" fontSize="10" fill="var(--color-muted-foreground)">Carcinoid syndrome shunts tryptophan toward serotonin, causing niacin (B3) deficiency (pellagra-like symptoms)</text>
+    </svg>
+  );
+}
+
+export function BcaaCatabolismDiagram() {
+  return (
+    <svg viewBox="0 0 460 150" className="w-full" role="img" aria-label="Branched-chain amino acid catabolism diagram">
+      <ArrowDefs />
+      <Step x={20} y={40} w={190} label="Leucine, Isoleucine, Valine" color={teal} />
+      <Arrow x1={210} y1={60} x2={238} y2={60} />
+      <circle cx="270" cy="60" r="38" fill={amber.bg} stroke={amber.fg} strokeOpacity={0.4} />
+      <text x="270" y="56" textAnchor="middle" fontSize="9" fontWeight={700} fill={amber.fg}>Branched-chain</text>
+      <text x="270" y="68" textAnchor="middle" fontSize="9" fontWeight={700} fill={amber.fg}>α-KA dehydrogenase</text>
+      <Arrow x1={308} y1={60} x2={336} y2={60} />
+      <Step x={338} y={40} w={110} label="Acetyl/Succinyl-CoA" color={rose} />
+
+      <rect x="20" y="95" width="428" height="46" rx="10" fill={violet.bg} opacity={0.4} />
+      <text x="234" y="113" textAnchor="middle" fontSize="10" fill={violet.fg}>Maple syrup urine disease: this enzyme (lipoic-acid dependent, like pyruvate dehydrogenase) is deficient</text>
+      <text x="234" y="130" textAnchor="middle" fontSize="9.5" fill={violet.fg}>Sweet, burnt-sugar smelling urine; treated with dietary BCAA restriction</text>
+
+      <circle r="4.5" fill={teal.fg}>
+        <animateMotion dur="4s" repeatCount="indefinite" path="M 100 60 L 270 60 L 400 60" />
+      </circle>
+    </svg>
+  );
+}
+
+export function ZymogenActivationDiagram() {
+  return (
+    <svg viewBox="0 0 460 190" className="w-full" role="img" aria-label="Zymogen activation cascade diagram">
+      <ArrowDefs />
+      <Step x={20} y={20} w={180} label="Trypsinogen" color={teal} />
+      <Arrow x1={110} y1={60} x2={110} y2={80} />
+      <text x="150" y="75" fontSize="8.5" fontWeight={700} fill={amber.fg}>Enteropeptidase (brush border)</text>
+      <Step x={20} y={85} w={180} label="Trypsin" color={amber} />
+
+      <Arrow x1={200} y1={105} x2={240} y2={105} />
+      <text x="220" y="98" fontSize="8" fill={violet.fg}>autoactivates more</text>
+
+      <Step x={250} y={20} w={190} label="Chymotrypsinogen → Chymotrypsin" color={rose} />
+      <Step x={250} y={85} w={190} label="Proelastase → Elastase" color={rose} />
+      <Step x={250} y={150} w={190} label="Procarboxypeptidase → Carboxypeptidase" color={rose} />
+      <Arrow x1={110} y1={105} x2={250} y2={40} />
+      <Arrow x1={110} y1={105} x2={250} y2={105} />
+      <Arrow x1={110} y1={105} x2={250} y2={165} />
+
+      <circle r="4.5" fill={amber.fg}>
+        <animateMotion dur="5s" repeatCount="indefinite" path="M 110 40 L 110 105" />
+      </circle>
+      <text x="230" y="185" textAnchor="middle" fontSize="9.5" fill="var(--color-muted-foreground)">Trypsin is the master activator — one enzyme unlocks the entire pancreatic protease cascade</text>
+    </svg>
+  );
+}
+
+export function StarvationTimelineDiagram() {
+  const stages = [
+    { label: "0–24 h", sub: "liver glycogenolysis" },
+    { label: "1–3 days", sub: "gluconeogenesis (alanine, glycerol, lactate)" },
+    { label: "3+ days", sub: "muscle protein spared; ketone bodies rise" },
+    { label: "Prolonged fast", sub: "brain shifts to ketones for ~⅔ of fuel" },
+  ];
+  const colW = 128;
+  return (
+    <svg viewBox={`0 0 ${stages.length * colW + 20} 120`} className="w-full" role="img" aria-label="Starvation fuel metabolism timeline diagram">
+      <ArrowDefs />
+      {stages.map((s, i) => {
+        const x = 10 + i * colW;
+        return (
+          <g key={s.label}>
+            <Step x={x} y={40} w={114} h={44} label={s.label} sub={s.sub} color={[teal, amber, rose, violet][i]!} />
+            {i < stages.length - 1 && <Arrow x1={x + 114} y1={62} x2={x + colW - 6} y2={62} />}
+          </g>
+        );
+      })}
+      <circle r="5" fill={amber.fg}>
+        <animateMotion dur="7s" repeatCount="indefinite" path={`M 67 62 ${stages.map((_, i) => `L ${10 + i * colW + 57} 62`).join(" ")}`} />
+      </circle>
+      <text x={(stages.length * colW + 20) / 2} y={20} textAnchor="middle" fontSize="10" fill="var(--color-muted-foreground)">Ketone bodies spare muscle protein during prolonged fasting by giving the brain a glucose-independent fuel</text>
+    </svg>
+  );
+}
+
+export function B12AbsorptionDiagram() {
+  const steps = [
+    { label: "Dietary B12", sub: "bound to food protein" },
+    { label: "Released by pepsin/acid", sub: "stomach" },
+    { label: "Binds intrinsic factor", sub: "from parietal cells" },
+    { label: "Absorbed via cubilin receptor", sub: "terminal ileum" },
+  ];
+  const colW = 118;
+  return (
+    <svg viewBox={`0 0 ${steps.length * colW + 20} 120`} className="w-full" role="img" aria-label="Vitamin B12 absorption pathway diagram">
+      <ArrowDefs />
+      {steps.map((s, i) => {
+        const x = 10 + i * colW;
+        return (
+          <g key={s.label}>
+            <Step x={x} y={40} w={106} h={44} label={s.label} sub={s.sub} color={i === 2 ? amber : teal} />
+            {i < steps.length - 1 && <Arrow x1={x + 106} y1={62} x2={x + colW - 6} y2={62} />}
+          </g>
+        );
+      })}
+      <circle r="5" fill={teal.fg}>
+        <animateMotion dur="6s" repeatCount="indefinite" path={`M 63 62 ${steps.map((_, i) => `L ${10 + i * colW + 53} 62`).join(" ")}`} />
+      </circle>
+      <text x={(steps.length * colW + 20) / 2} y={20} textAnchor="middle" fontSize="10" fill="var(--color-muted-foreground)">Pernicious anemia: autoimmune destruction of parietal cells or anti-intrinsic-factor antibodies blocks this pathway</text>
+    </svg>
+  );
+}
+
+export function ElisaWorkflowDiagram() {
+  const steps = [
+    { label: "Coat plate", sub: "capture antibody/antigen" },
+    { label: "Add sample", sub: "target binds" },
+    { label: "Add enzyme-linked antibody", sub: "detection step" },
+    { label: "Add substrate", sub: "color develops" },
+    { label: "Read absorbance", sub: "quantify signal" },
+  ];
+  const colW = 100;
+  return (
+    <svg viewBox={`0 0 ${steps.length * colW + 20} 120`} className="w-full" role="img" aria-label="ELISA workflow diagram">
+      <ArrowDefs />
+      {steps.map((s, i) => {
+        const x = 10 + i * colW;
+        return (
+          <g key={s.label}>
+            <Step x={x} y={40} w={88} h={44} label={s.label} sub={s.sub} color={i === 3 ? amber : violet} />
+            {i < steps.length - 1 && <Arrow x1={x + 88} y1={62} x2={x + colW - 4} y2={62} />}
+          </g>
+        );
+      })}
+      <circle r="5" fill={violet.fg}>
+        <animateMotion dur="6.5s" repeatCount="indefinite" path={`M 54 62 ${steps.map((_, i) => `L ${10 + i * colW + 44} 62`).join(" ")}`} />
+      </circle>
+      <text x={(steps.length * colW + 20) / 2} y={20} textAnchor="middle" fontSize="10" fill="var(--color-muted-foreground)">Used clinically for HIV screening, hormone assays (e.g. hCG), and autoimmune antibody panels</text>
+    </svg>
+  );
+}
