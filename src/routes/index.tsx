@@ -342,28 +342,37 @@ const GALLERY_ICONS = [
   { src: "/icons/antibody.svg", label: "Antibody (VDJ recombination)", caption: "How heavy-chain gene segments recombine to generate antibody diversity.", topicId: "plasma-proteins" },
 ];
 
-const DIAGRAMS: { topicId: string; title: string; description: string; Component: () => ReactNode }[] = [
-  { topicId: "enzymes", title: "Enzyme Kinetics (Michaelis-Menten)", description: "How velocity rises with substrate concentration toward Vmax; Km marks half-max.", Component: EnzymeKineticsDiagram },
-  { topicId: "glycolysis", title: "Glycolysis", description: "Glucose → pyruvate, 10 steps, cytosolic.", Component: GlycolysisDiagram },
-  { topicId: "glycogen-hmp", title: "HMP Shunt (Pentose Phosphate Pathway)", description: "NADPH and ribose-5-phosphate production from glucose-6-phosphate.", Component: HmpShuntDiagram },
-  { topicId: "glycogen-hmp", title: "Glycogen Metabolism", description: "Glycogenesis vs glycogenolysis — opposite enzymes, opposite hormones.", Component: GlycogenMetabolismDiagram },
-  { topicId: "tca-etc", title: "TCA (Krebs) Cycle", description: "Acetyl-CoA oxidation in the mitochondrial matrix — 8 intermediates per turn.", Component: TCACycleDiagram },
-  { topicId: "tca-etc", title: "Electron Transport Chain", description: "Inner mitochondrial membrane — electron flow drives the proton gradient.", Component: ElectronTransportDiagram },
-  { topicId: "lipid", title: "Beta-Oxidation", description: "Spiral shortening of a fatty acyl chain, 2 carbons at a time.", Component: BetaOxidationDiagram },
-  { topicId: "lipid", title: "Lipoprotein Transport", description: "Chylomicrons, VLDL, LDL, HDL — who carries what, and to where.", Component: LipoproteinTransportDiagram },
-  { topicId: "lipid", title: "Cholesterol Synthesis", description: "Acetyl-CoA to cholesterol — where statins act.", Component: CholesterolSynthesisDiagram },
-  { topicId: "amino-acid", title: "Urea Cycle", description: "Split across mitochondria and cytosol — ammonia disposal as urea.", Component: UreaCycleDiagram },
-  { topicId: "amino-acid", title: "Transamination", description: "How amino groups move between amino acids and keto acids via ALT/AST.", Component: TransaminationDiagram },
-  { topicId: "nucleic-acid", title: "Purine Degradation", description: "Purines to uric acid — where allopurinol intervenes.", Component: PurineDegradationDiagram },
-  { topicId: "molbio", title: "DNA Replication Fork", description: "Leading vs lagging strand synthesis at the replication fork.", Component: DnaReplicationDiagram },
-  { topicId: "biotech", title: "PCR Thermal Cycle", description: "Denaturation, annealing, extension — the 3-step loop that amplifies DNA.", Component: PcrCycleDiagram },
-  { topicId: "heme", title: "Heme Synthesis", description: "Alternates between mitochondria and cytosol; lead poisoning blocks two steps.", Component: HemeSynthesisDiagram },
-  { topicId: "water-electrolyte", title: "Bicarbonate Buffer System", description: "CO₂/HCO₃⁻ equilibrium — how lungs and kidneys defend blood pH.", Component: AcidBaseBufferDiagram },
-  { topicId: "endocrine", title: "Insulin vs Glucagon", description: "The reciprocal hormone see-saw between the fed and fasting state.", Component: InsulinGlucagonDiagram },
-  { topicId: "digestion", title: "Digestive Tract Journey", description: "One bolus, five stages — what happens at each stop.", Component: DigestionJourneyDiagram },
+const DIAGRAMS: { topicId: string; title: string; description: string; pearl: string; Component: () => ReactNode }[] = [
+  { topicId: "enzymes", title: "Enzyme Kinetics (Michaelis-Menten)", description: "How velocity rises with substrate concentration toward Vmax; Km marks half-max.", pearl: "Competitive inhibitors raise the apparent Km but leave Vmax unchanged (excess substrate overcomes them); noncompetitive inhibitors lower Vmax but leave Km unchanged. Examiners test this via Lineweaver-Burk (1/v vs 1/[S]) plots.", Component: EnzymeKineticsDiagram },
+  { topicId: "glycolysis", title: "Glycolysis", description: "Glucose → pyruvate, 10 steps, cytosolic.", pearl: "Pyruvate kinase deficiency is the most common glycolytic enzyme defect causing hereditary non-spherocytic hemolytic anemia — RBCs have no mitochondria and depend entirely on glycolysis for ATP.", Component: GlycolysisDiagram },
+  { topicId: "glycogen-hmp", title: "HMP Shunt (Pentose Phosphate Pathway)", description: "NADPH and ribose-5-phosphate production from glucose-6-phosphate.", pearl: "G6PD deficiency is the most common enzyme deficiency worldwide (X-linked). Oxidative stress — fava beans, sulfa drugs, antimalarials, infection — precipitates hemolysis with Heinz bodies and 'bite cells' on smear.", Component: HmpShuntDiagram },
+  { topicId: "glycogen-hmp", title: "Glycogen Metabolism", description: "Glycogenesis vs glycogenolysis — opposite enzymes, opposite hormones.", pearl: "Von Gierke disease (glucose-6-phosphatase deficiency, type I) causes severe fasting hypoglycemia, lactic acidosis, and hepatomegaly. McArdle disease (myophosphorylase deficiency, type V) causes exercise intolerance with no rise in lactate.", Component: GlycogenMetabolismDiagram },
+  { topicId: "tca-etc", title: "TCA (Krebs) Cycle", description: "Acetyl-CoA oxidation in the mitochondrial matrix — 8 intermediates per turn.", pearl: "Arsenic inhibits lipoic acid-dependent enzymes (pyruvate dehydrogenase, α-ketoglutarate dehydrogenase), halting the cycle — vomiting, garlic-odor breath, and rice-water stools are classic clues.", Component: TCACycleDiagram },
+  { topicId: "tca-etc", title: "Electron Transport Chain", description: "Inner mitochondrial membrane — electron flow drives the proton gradient.", pearl: "Cyanide blocks Complex IV; treatment uses nitrites to generate methemoglobin (which binds cyanide) followed by thiosulfate. Uncouplers (2,4-dinitrophenol) dissipate the proton gradient without making ATP, releasing the energy as heat instead.", Component: ElectronTransportDiagram },
+  { topicId: "lipid", title: "Beta-Oxidation", description: "Spiral shortening of a fatty acyl chain, 2 carbons at a time.", pearl: "MCAD deficiency (medium-chain acyl-CoA dehydrogenase) is the classic fatty-acid oxidation defect — infants present with hypoketotic hypoglycemia and lethargy after a prolonged fast.", Component: BetaOxidationDiagram },
+  { topicId: "lipid", title: "Lipoprotein Transport", description: "Chylomicrons, VLDL, LDL, HDL — who carries what, and to where.", pearl: "Familial hypercholesterolemia (defective LDL receptor) causes markedly elevated LDL, tendon xanthomas, and premature coronary disease. Statins work partly by upregulating LDL receptor expression.", Component: LipoproteinTransportDiagram },
+  { topicId: "lipid", title: "Cholesterol Synthesis", description: "Acetyl-CoA to cholesterol — where statins act.", pearl: "HMG-CoA reductase activity peaks overnight, which is why most statins are most effective when dosed in the evening (shorter-acting ones especially).", Component: CholesterolSynthesisDiagram },
+  { topicId: "amino-acid", title: "Urea Cycle", description: "Split across mitochondria and cytosol — ammonia disposal as urea.", pearl: "Ornithine transcarbamylase (OTC) deficiency is the only X-linked urea cycle disorder — look for hyperammonemia with elevated urinary orotic acid but no lactic acidosis (distinguishing it from organic acidemias).", Component: UreaCycleDiagram },
+  { topicId: "amino-acid", title: "Transamination", description: "How amino groups move between amino acids and keto acids via ALT/AST.", pearl: "ALT is more liver-specific than AST. An AST:ALT ratio greater than 2 classically suggests alcoholic liver disease rather than viral hepatitis.", Component: TransaminationDiagram },
+  { topicId: "nucleic-acid", title: "Purine Degradation", description: "Purines to uric acid — where allopurinol intervenes.", pearl: "Lesch-Nyhan syndrome (HGPRT deficiency, X-linked) causes hyperuricemia, gout, self-mutilating behavior, and intellectual disability — a favorite board vignette in young boys.", Component: PurineDegradationDiagram },
+  { topicId: "molbio", title: "DNA Replication Fork", description: "Leading vs lagging strand synthesis at the replication fork.", pearl: "Fluoroquinolones selectively inhibit bacterial DNA gyrase (topoisomerase II), sparing the structurally different human enzyme — the basis of their antibacterial safety margin.", Component: DnaReplicationDiagram },
+  { topicId: "biotech", title: "PCR Thermal Cycle", description: "Denaturation, annealing, extension — the 3-step loop that amplifies DNA.", pearl: "Real-time (quantitative) PCR is now the backbone of viral load testing — HIV, hepatitis, and SARS-CoV-2 — because fluorescence intensity each cycle correlates directly with the amount of target present.", Component: PcrCycleDiagram },
+  { topicId: "heme", title: "Heme Synthesis", description: "Alternates between mitochondria and cytosol; lead poisoning blocks two steps.", pearl: "Lead inhibits ALA dehydratase and ferrochelatase, producing a microcytic anemia with basophilic stippling — a classic mimicker of both iron deficiency and thalassemia on peripheral smear.", Component: HemeSynthesisDiagram },
+  { topicId: "water-electrolyte", title: "Bicarbonate Buffer System", description: "CO₂/HCO₃⁻ equilibrium — how lungs and kidneys defend blood pH.", pearl: "Respiratory compensation for a metabolic acidosis is fast (minutes — Kussmaul breathing blows off CO₂); renal compensation for a respiratory disorder is slow, taking 3-5 days to fully adjust bicarbonate reabsorption.", Component: AcidBaseBufferDiagram },
+  { topicId: "endocrine", title: "Insulin vs Glucagon", description: "The reciprocal hormone see-saw between the fed and fasting state.", pearl: "In diabetic ketoacidosis, absolute insulin deficiency leaves glucagon's actions unopposed — unchecked lipolysis and ketogenesis drive the characteristic anion-gap metabolic acidosis.", Component: InsulinGlucagonDiagram },
+  { topicId: "digestion", title: "Digestive Tract Journey", description: "One bolus, five stages — what happens at each stop.", pearl: "Pancreatic exocrine insufficiency (chronic pancreatitis, cystic fibrosis) impairs fat digestion, causing steatorrhea — foul-smelling, greasy, floating stools and fat-soluble vitamin (A, D, E, K) deficiency.", Component: DigestionJourneyDiagram },
 ];
 
-function DiagramCard({ title, description, color, onExpand, children }: { title: string; description: string; color: { bg: string; fg: string; ring: string }; onExpand: () => void; children: ReactNode }) {
+function ClinicalPearl({ text, color }: { text: string; color: { bg: string; fg: string } }) {
+  return (
+    <div style={{ backgroundColor: color.bg }} className="mt-3 rounded-lg p-3 text-left">
+      <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color: color.fg }}>Clinical pearl</p>
+      <p className="mt-1 text-xs leading-relaxed" style={{ color: color.fg }}>{text}</p>
+    </div>
+  );
+}
+
+function DiagramCard({ title, description, pearl, color, onExpand, children }: { title: string; description: string; pearl: string; color: { bg: string; fg: string; ring: string }; onExpand: () => void; children: ReactNode }) {
   return (
     <div style={{ borderTopColor: color.ring }} className="rounded-xl border border-border border-t-4 bg-card p-4 shadow-sm sm:p-6">
       <div className="flex items-start justify-between gap-3">
@@ -386,6 +395,7 @@ function DiagramCard({ title, description, color, onExpand, children }: { title:
           Tap to enlarge
         </span>
       </button>
+      <ClinicalPearl text={pearl} color={color} />
     </div>
   );
 }
@@ -448,7 +458,7 @@ function Diagrams() {
                     const color = topicColor(d.topicId);
                     const D = d.Component;
                     return (
-                      <DiagramCard key={unit + d.title + i} title={d.title} description={d.description} color={color} onExpand={() => setOpenDiagram(d)}>
+                      <DiagramCard key={unit + d.title + i} title={d.title} description={d.description} pearl={d.pearl} color={color} onExpand={() => setOpenDiagram(d)}>
                         <D />
                       </DiagramCard>
                     );
@@ -497,6 +507,7 @@ function Diagrams() {
           <div className="rounded-lg bg-muted/40 p-4">
             <openDiagram.Component />
           </div>
+          <ClinicalPearl text={openDiagram.pearl} color={topicColor(openDiagram.topicId)} />
         </Modal>
       )}
     </section>
